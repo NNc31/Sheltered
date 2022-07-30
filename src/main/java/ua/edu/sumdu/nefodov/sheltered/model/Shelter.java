@@ -1,6 +1,7 @@
 package ua.edu.sumdu.nefodov.sheltered.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @IdClass(Coordinates.class)
@@ -19,15 +20,26 @@ public class Shelter {
     @Enumerated(EnumType.STRING)
     private ShelterStatus status;
 
+    @ElementCollection(targetClass = ShelterConditions.class)
+    @JoinTable(name = "conditions")
+    @Column(name = "conditions")
+    @Enumerated(EnumType.STRING)
+    private List<ShelterConditions> conditions;
+
     private int capacity;
+
     private double area;
-    private boolean food;
-    private boolean water;
-    private boolean electricity;
+
     private String additional;
 
     public Shelter() {
         counter = 0;
+    }
+
+    public static boolean isValidShelter(Shelter shelter) {
+        return shelter.getArea() > 0 && shelter.getCapacity() > 0 && shelter.getStatus() != null
+                && shelter.getLatitude() >= -90 && shelter.getLatitude() <= 90
+                && shelter.getLongitude() >= -180 && shelter.getLongitude() <= 180;
     }
 
     public double getLatitude() {
@@ -78,28 +90,12 @@ public class Shelter {
         this.status = status;
     }
 
-    public boolean isFood() {
-        return food;
+    public List<ShelterConditions> getConditions() {
+        return conditions;
     }
 
-    public void setFood(boolean food) {
-        this.food = food;
-    }
-
-    public boolean isWater() {
-        return water;
-    }
-
-    public void setWater(boolean water) {
-        this.water = water;
-    }
-
-    public boolean isElectricity() {
-        return electricity;
-    }
-
-    public void setElectricity(boolean electricity) {
-        this.electricity = electricity;
+    public void setConditions(List<ShelterConditions> conditions) {
+        this.conditions = conditions;
     }
 
     public String getAdditional() {
@@ -117,11 +113,9 @@ public class Shelter {
                 ", longitude=" + longitude +
                 ", counter=" + counter +
                 ", status=" + status +
+                ", conditions=" + conditions +
                 ", capacity=" + capacity +
                 ", area=" + area +
-                ", food=" + food +
-                ", water=" + water +
-                ", electricity=" + electricity +
                 ", additional='" + additional + '\'' +
                 '}';
     }

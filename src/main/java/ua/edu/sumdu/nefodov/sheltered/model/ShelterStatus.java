@@ -1,6 +1,16 @@
 package ua.edu.sumdu.nefodov.sheltered.model;
 
 public enum ShelterStatus {
-    //IN_USE, BLOCKED, DESTROYED, ABANDONED, UNKNOWN
-    РОБОЧЕ, БУДУЄТЬСЯ, ЗАБЛОКОВАНЕ, ЗНИЩЕНЕ, ПОКИНУТЕ, НЕВІДОМО,
+    IN_USE("Робоче"),
+    UNDER_CONSTRUCTION("Будується"),
+    BLOCKED("Заблоковане"),
+    DESTROYED("Знищене"),
+    ABANDONED("Покинуте"),
+    UNKNOWN("Невідомо");
+
+    public final String label;
+
+    ShelterStatus(String label) {
+        this.label = label;
+    }
 }

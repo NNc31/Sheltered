@@ -3,87 +3,105 @@ package ua.edu.sumdu.nefodov.sheltered.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 import ua.edu.sumdu.nefodov.sheltered.model.Shelter;
-import ua.edu.sumdu.nefodov.sheltered.model.ShelterStatus;
-import ua.edu.sumdu.nefodov.sheltered.repository.ShelterRepository;
 import ua.edu.sumdu.nefodov.sheltered.service.ShelterService;
-
-import java.util.Iterator;
-import java.util.List;
 
 @Controller
 public class ShelteredController {
 
-    //private ShelterService shelterService;
+    private ShelterService shelterService;
 
-    private ShelterRepository shelterRepo;
-
-    /*
     @Autowired
     public ShelteredController(ShelterService shelterService) {
         this.shelterService = shelterService;
     }
 
-     */
+    @GetMapping("/")
+    public String index(Model model) {
+        Double lat = null, lng = null;
+        model.addAttribute("lat", lat);
+        model.addAttribute("lng", lng);
 
-    @Autowired
-    public ShelteredController(ShelterRepository shelterRepo) {
-        System.out.println("autowired repo");
-        this.shelterRepo = shelterRepo;
+        model.addAttribute("shelters", shelterService.findAll());
+        return "index";
     }
 
-    @GetMapping("/")
-    public String index() {
-        return "index";
+    @GetMapping("/shelter")
+    public String showShelterSubmit(Model model,
+                                    @RequestParam(value = "lat", required = false) Double lat,
+                                    @RequestParam(value = "lng", required = false) Double lng) {
+        Shelter shelter = shelterService.findByCoords(lat, lng);
+
+        if (shelter == null) {
+            model.addAttribute("error", "Неможливо відобразити сховище");
+            return "/";
+        } else {
+            model.addAttribute("shelter", shelter);
+            model.addAttribute("statusLabel", shelter.getStatus().label);
+            return "shelter";
+        }
     }
 
     @GetMapping("/add-form")
     public String addShelter(Model model) {
         model.addAttribute("shelter", new Shelter());
-        model.addAttribute("shelters", shelterRepo.findAll());
-        return "addShelter";
+        model.addAttribute("shelters", shelterService.findAll());
+        return "add";
     }
 
     @PostMapping("/add")
-    public String addShelterSubmit(@ModelAttribute Shelter shelter, Model model) {
-        model.addAttribute("shelter", shelter);
-        /*
-        Model model, @RequestParam String coords,
-        RequestParam double area,
-                             @RequestParam int capacity,
-                             @RequestParam boolean food,
-                             @RequestParam boolean water,
-                             @RequestParam boolean electricity,
-                             @RequestParam String additional,
-                             @RequestParam String status
-        Shelter shelter = new Shelter();
-        shelterRepo.save(shelter);
-         */
-
-        //System.out.println("POST ADD");
-        //System.out.println(shelter.getArea());
-        //System.out.println(shelter.getCapacity());
-        //System.out.println(shelter.isFood());
-        //System.out.println(shelter.isWater());
-        //System.out.println(shelter.isElectricity());
-
-
-        //System.out.println(shelter.getAdditional()); //?
-        //System.out.println(shelter.getStatus()); //?
-        return "index";
+    public RedirectView addShelterSubmit(@ModelAttribute Shelter shelter, RedirectAttributes redirectAttributes) {
+        if (Shelter.isValidShelter(shelter)) {
+            shelterService.addShelter(shelter);
+            redirectAttributes.addFlashAttribute("success", "Сховище успішно додано");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Неможливо додати сховище");
+        }
+        return new RedirectView("/add-form", true);
     }
 
-    @GetMapping("/edit")
-    public String editShelter() {
-        return "editShelter";
+    @GetMapping("/edit-form")
+    public String editShelter(Model model) {
+        model.addAttribute("shelter", new Shelter());
+        model.addAttribute("shelters", shelterService.findAll());
+        return "edit";
     }
 
-    @GetMapping("/delete")
-    public String deleteShelter() {
-        return "deleteShelter";
+    @PostMapping("/edit")
+    public RedirectView editShelterSubmit(@ModelAttribute Shelter shelter, RedirectAttributes redirectAttributes) {
+        if (Shelter.isValidShelter(shelter)) {
+            shelterService.updateShelter(shelter);
+            redirectAttributes.addFlashAttribute("success", "Сховище успішно змінено");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Неможливо змінити сховище");
+        }
+        return new RedirectView("/edit-form", true);
+    }
+
+    @GetMapping("/delete-form")
+    public String deleteShelter(Model model) {
+        Double lat = null, lng = null;
+        model.addAttribute("lat", lat);
+        model.addAttribute("lng", lng);
+
+        model.addAttribute("shelters", shelterService.findAll());
+        return "delete";
+    }
+
+    @PostMapping("/delete")
+    public RedirectView deleteShelterSubmit(@RequestParam(value = "lat", required = false) Double lat,
+                                            @RequestParam(value = "lng", required = false) Double lng,
+                                            RedirectAttributes redirectAttributes) {
+        if (lat == null || lng == null) {
+            redirectAttributes.addFlashAttribute("error", "Неможливо видалити сховище");
+
+        } else {
+            shelterService.deleteShelter(lat, lng);
+            redirectAttributes.addFlashAttribute("success", "Сховище успішно видалено");
+        }
+        return new RedirectView("/delete-form", true);
     }
 }

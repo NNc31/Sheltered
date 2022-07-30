@@ -14,10 +14,10 @@
         <a class="navbar-brand mx-5" href="/"><h3>Sheltered!</h3></a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link active" href="/">Головна</a></li>
+                <li class="nav-item"><a class="nav-link" href="/">Головна</a></li>
                 <li class="nav-item"><a class="nav-link" href="add-form">Додати сховище</a></li>
                 <li class="nav-item"><a class="nav-link" href="edit-form">Змінити сховище</a></li>
-                <li class="nav-item"><a class="nav-link" href="delete-form">Видалити сховище</a></li>
+                <li class="nav-item"><a class="nav-link active" href="delete-form">Видалити сховище</a></li>
                 <li class="nav-item"><a class="nav-link" href="/logout">Вийти</a></li>
             </ul>
         </div>
@@ -29,21 +29,31 @@
             [[${error}]]
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-        <h4>Огляд сховищ</h4>
-        <small class="text-muted">Клікніть на необхідний маркер</small>
-        <form action="#" th:action="@{/shelter}" method="get" id="form">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" th:inline="text" th:if="${success}">
+            [[${success}]]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <h4>Оберіть сховище для видалення</h4>
+        <form action="#" th:action="@{/delete}" method="post" class="bg-light p-4">
             <input type="hidden" id="lat" name="latitude" th:name="lat">
             <input type="hidden" id="lng" name="longitude" th:name="lng">
+            <div class="mb-3">
+                <h5>Встановіть геолокацію сховища</h5>
+                <small class="text-muted">Натисніть на необхідний маркер</small>
+            </div>
+            <div class="container-fluid mb-5" id="map">
+                <script th:inline="javascript">
+                    var shelters = [[${shelters}]];
+                </script>
+                <script src="/js/deleteShelter.js"></script>
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNygk1I_A0o5KiaTXySMczo0evoDak2ug&callback=initMap"
+                        defer>
+                </script>
+            </div>
+            <div class="mt-4">
+                <input type="submit" value="Видалити сховище" class="btn btn-dark"/>
+            </div>
         </form>
-        <div class="container-fluid mt-3 mb-5" id="map">
-            <script th:inline="javascript">
-                var shelters = [[${shelters}]];
-            </script>
-            <script src="/js/index.js"></script>
-            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNygk1I_A0o5KiaTXySMczo0evoDak2ug&callback=initMap"
-                    defer>
-            </script>
-        </div>
     </div>
 </div>
 </body>
