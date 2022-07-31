@@ -7,7 +7,6 @@ import ua.edu.sumdu.nefodov.sheltered.model.Shelter;
 import ua.edu.sumdu.nefodov.sheltered.repository.ShelterRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ShelterService {
@@ -32,19 +31,38 @@ public class ShelterService {
     }
 
     public void updateShelter(Shelter updatedShelter) {
-        Shelter shelterToUpdate = shelterRepo.getReferenceById(new Coordinates(updatedShelter.getLatitude(), updatedShelter.getLongitude()));
+        Coordinates coords = new Coordinates(updatedShelter.getLatitude(), updatedShelter.getLongitude());
+        Shelter shelterToUpdate = shelterRepo.findById(coords).orElse(null);
 
-        shelterToUpdate.setStatus(updatedShelter.getStatus());
-        shelterToUpdate.setConditions(updatedShelter.getConditions());
-        shelterToUpdate.setCapacity(updatedShelter.getCapacity());
-        shelterToUpdate.setArea(updatedShelter.getArea());
-        shelterToUpdate.setAdditional(updatedShelter.getAdditional());
+        if (shelterToUpdate != null) {
+            shelterToUpdate.setStatus(updatedShelter.getStatus());
+            shelterToUpdate.setConditions(updatedShelter.getConditions());
+            shelterToUpdate.setCapacity(updatedShelter.getCapacity());
+            shelterToUpdate.setArea(updatedShelter.getArea());
+            shelterToUpdate.setAdditional(updatedShelter.getAdditional());
 
-        shelterRepo.save(shelterToUpdate);
+            shelterRepo.save(shelterToUpdate);
+        }
     }
 
     public void deleteShelter(double lat, double lng) {
         Coordinates coords = new Coordinates(lat, lng);
         shelterRepo.deleteById(coords);
+    }
+
+    public void updateCounter(double lat, double lng, int cnt) {
+        Shelter shelter = shelterRepo.findById(new Coordinates(lat, lng)).orElse(null);
+        if (shelter != null) {
+            shelter.setCounter(shelter.getCounter() + cnt);
+            shelterRepo.save(shelter);
+        }
+    }
+
+    public void incrementCounter(double lat, double lng) {
+        Shelter shelter = shelterRepo.findById(new Coordinates(lat, lng)).orElse(null);
+        if (shelter != null) {
+            shelter.setCounter(shelter.getCounter() + 1);
+            shelterRepo.save(shelter);
+        }
     }
 }

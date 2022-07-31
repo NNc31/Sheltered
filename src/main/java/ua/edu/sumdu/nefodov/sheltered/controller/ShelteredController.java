@@ -9,6 +9,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import ua.edu.sumdu.nefodov.sheltered.model.Shelter;
 import ua.edu.sumdu.nefodov.sheltered.service.ShelterService;
 
+import java.util.List;
+
 @Controller
 public class ShelteredController {
 

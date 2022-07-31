@@ -14,9 +14,6 @@ public class Shelter {
     @Id
     private double longitude;
 
-    @Transient
-    private int counter;
-
     @Enumerated(EnumType.STRING)
     private ShelterStatus status;
 
@@ -26,10 +23,9 @@ public class Shelter {
     @Enumerated(EnumType.STRING)
     private List<ShelterConditions> conditions;
 
+    private int counter;
     private int capacity;
-
     private double area;
-
     private String additional;
 
     public Shelter() {
