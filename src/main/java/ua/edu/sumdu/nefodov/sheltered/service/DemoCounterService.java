@@ -25,17 +25,17 @@ public class DemoCounterService implements CounterService {
     }
 
     @Override
-    public void receiveSignal(double lat, double lng, int cnt) {
+    public void receiveIncreaseSignal(double lat, double lng, int cnt) {
         shelterService.updateCounter(lat, lng, cnt);
     }
 
     @Override
-    public void receiveSingleSignal(double lat, double lng) {
-        shelterService.incrementCounter(lat, lng);
+    public void receiveDecreaseSignal(double lat, double lng, int cnt) {
+        shelterService.updateCounter(lat, lng, -1 * cnt);
     }
 
     @Override
-    public boolean pingCounter() {
+    public boolean isActive() {
         return timer != null;
     }
 
@@ -64,10 +64,10 @@ public class DemoCounterService implements CounterService {
             List<Shelter> shelters = shelterService.findAll();
             Shelter rndShelter = shelters.get(rnd.nextInt(shelters.size()));
             if (rndShelter.getCounter() < rndShelter.getCapacity()) {
-                receiveSignal(rndShelter.getLatitude(), rndShelter.getLongitude(), rnd.nextInt(CNT_BOUND));
+                receiveIncreaseSignal(rndShelter.getCoordinates().getLatitude(), rndShelter.getCoordinates().getLongitude(), rnd.nextInt(CNT_BOUND));
                 timer.schedule(new SendSignalTask(), rnd.nextInt(DELAY_BOUND));
             } else {
-                receiveSingleSignal(rndShelter.getLatitude(), rndShelter.getLongitude());
+                receiveDecreaseSignal(rndShelter.getCoordinates().getLatitude(), rndShelter.getCoordinates().getLongitude(), rnd.nextInt(CNT_BOUND, 2 * CNT_BOUND));
                 timer.schedule(new SendSignalTask(), rnd.nextInt(DELAY_BOUND, 2 * DELAY_BOUND));
             }
         }

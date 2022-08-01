@@ -4,22 +4,17 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@IdClass(Coordinates.class)
 @Table(name = "shelters")
 public class Shelter {
 
-    @Id
-    private double latitude;
-
-    @Id
-    private double longitude;
+    @EmbeddedId
+    private Coordinates coordinates;
 
     @Enumerated(EnumType.STRING)
     private ShelterStatus status;
 
     @ElementCollection(targetClass = ShelterConditions.class)
     @JoinTable(name = "conditions")
-    @Column(name = "conditions")
     @Enumerated(EnumType.STRING)
     private List<ShelterConditions> conditions;
 
@@ -34,24 +29,16 @@ public class Shelter {
 
     public static boolean isValidShelter(Shelter shelter) {
         return shelter.getArea() > 0 && shelter.getCapacity() > 0 && shelter.getStatus() != null
-                && shelter.getLatitude() >= -90 && shelter.getLatitude() <= 90
-                && shelter.getLongitude() >= -180 && shelter.getLongitude() <= 180;
+                && shelter.getCoordinates().getLatitude() >= -90 && shelter.getCoordinates().getLatitude() <= 90
+                && shelter.getCoordinates().getLongitude() >= -180 && shelter.getCoordinates().getLongitude() <= 180;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public Coordinates getCoordinates() {
+        return coordinates;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
     }
 
     public int getCounter() {
@@ -105,8 +92,8 @@ public class Shelter {
     @Override
     public String toString() {
         return "Shelter{" +
-                "latitude=" + latitude +
-                ", longitude=" + longitude +
+                "latitude=" + coordinates.getLatitude() +
+                ", longitude=" + coordinates.getLongitude() +
                 ", counter=" + counter +
                 ", status=" + status +
                 ", conditions=" + conditions +

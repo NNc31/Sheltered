@@ -9,19 +9,18 @@ import org.springframework.web.servlet.view.RedirectView;
 import ua.edu.sumdu.nefodov.sheltered.model.Shelter;
 import ua.edu.sumdu.nefodov.sheltered.service.ShelterService;
 
-import java.util.List;
-
 @Controller
+@RequestMapping("/shelter")
 public class ShelteredController {
 
-    private ShelterService shelterService;
+    private final ShelterService shelterService;
 
     @Autowired
     public ShelteredController(ShelterService shelterService) {
         this.shelterService = shelterService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public String index(Model model) {
         Double lat = null, lng = null;
         model.addAttribute("lat", lat);
@@ -31,7 +30,7 @@ public class ShelteredController {
         return "index";
     }
 
-    @GetMapping("/shelter")
+    @GetMapping("")
     public String showShelterSubmit(Model model,
                                     @RequestParam(value = "lat", required = false) Double lat,
                                     @RequestParam(value = "lng", required = false) Double lng) {
@@ -39,7 +38,7 @@ public class ShelteredController {
 
         if (shelter == null) {
             model.addAttribute("error", "Неможливо відобразити сховище");
-            return "/";
+            return "/home";
         } else {
             model.addAttribute("shelter", shelter);
             model.addAttribute("statusLabel", shelter.getStatus().label);
@@ -62,7 +61,7 @@ public class ShelteredController {
         } else {
             redirectAttributes.addFlashAttribute("error", "Неможливо додати сховище");
         }
-        return new RedirectView("/add-form", true);
+        return new RedirectView("/shelter/add-form", true);
     }
 
     @GetMapping("/edit-form")
@@ -80,7 +79,7 @@ public class ShelteredController {
         } else {
             redirectAttributes.addFlashAttribute("error", "Неможливо змінити сховище");
         }
-        return new RedirectView("/edit-form", true);
+        return new RedirectView("/shelter/edit-form", true);
     }
 
     @GetMapping("/delete-form")
@@ -104,6 +103,6 @@ public class ShelteredController {
             shelterService.deleteShelter(lat, lng);
             redirectAttributes.addFlashAttribute("success", "Сховище успішно видалено");
         }
-        return new RedirectView("/delete-form", true);
+        return new RedirectView("/shelter/delete-form", true);
     }
 }

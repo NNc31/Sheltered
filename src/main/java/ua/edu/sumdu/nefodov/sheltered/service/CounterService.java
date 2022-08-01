@@ -2,14 +2,13 @@ package ua.edu.sumdu.nefodov.sheltered.service;
 
 public interface CounterService {
 
+    void receiveIncreaseSignal(double lat, double lng, int cnt);
 
-    void receiveSignal(double lat, double lng, int cnt);
-
-    void receiveSingleSignal(double lat, double lng);
-
-    boolean pingCounter();
+    void receiveDecreaseSignal(double lat, double lng, int cnt);
 
     void enableCounter();
 
     void disableCounter();
+
+    boolean isActive();
 }

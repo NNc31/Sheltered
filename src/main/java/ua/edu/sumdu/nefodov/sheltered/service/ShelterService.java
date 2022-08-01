@@ -31,7 +31,7 @@ public class ShelterService {
     }
 
     public void updateShelter(Shelter updatedShelter) {
-        Coordinates coords = new Coordinates(updatedShelter.getLatitude(), updatedShelter.getLongitude());
+        Coordinates coords = new Coordinates(updatedShelter.getCoordinates().getLatitude(), updatedShelter.getCoordinates().getLongitude());
         Shelter shelterToUpdate = shelterRepo.findById(coords).orElse(null);
 
         if (shelterToUpdate != null) {
@@ -51,18 +51,18 @@ public class ShelterService {
     }
 
     public void updateCounter(double lat, double lng, int cnt) {
-        Shelter shelter = shelterRepo.findById(new Coordinates(lat, lng)).orElse(null);
-        if (shelter != null) {
-            shelter.setCounter(shelter.getCounter() + cnt);
-            shelterRepo.save(shelter);
-        }
+        shelterRepo.refreshCount(lat, lng, cnt);
     }
 
     public void incrementCounter(double lat, double lng) {
-        Shelter shelter = shelterRepo.findById(new Coordinates(lat, lng)).orElse(null);
-        if (shelter != null) {
-            shelter.setCounter(shelter.getCounter() + 1);
-            shelterRepo.save(shelter);
-        }
+        shelterRepo.refreshCount(lat, lng, 1);
+    }
+
+    public void decrementCounter(double lat, double lng) {
+        shelterRepo.refreshCount(lat, lng, -1);
+    }
+
+    public List<Coordinates> getAllCoords() {
+        return shelterRepo.findAllCoordinates();
     }
 }

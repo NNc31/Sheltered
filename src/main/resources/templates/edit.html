@@ -16,14 +16,14 @@
 <body style="padding-top:60px">
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
     <div class="container-md">
-        <a class="navbar-brand mx-5" href="/"><h3>Sheltered!</h3></a>
+        <a class="navbar-brand mx-5" href="/shelter/home"><h3>Sheltered!</h3></a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="/">Головна</a></li>
-                <li class="nav-item"><a class="nav-link" href="add-form">Додати сховище</a></li>
-                <li class="nav-item"><a class="nav-link active" href="edit-form">Змінити сховище</a></li>
-                <li class="nav-item"><a class="nav-link" href="delete-form">Видалити сховище</a></li>
-                <li class="nav-item"><a class="nav-link" href="/logout">Вийти</a></li>
+                <li class="nav-item"><a class="nav-link" href="/shelter/home">Головна</a></li>
+                <li class="nav-item"><a class="nav-link" href="/shelter/add-form">Додати сховище</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/shelter/edit-form">Змінити сховище</a></li>
+                <li class="nav-item"><a class="nav-link" href="/shelter/delete-form">Видалити сховище</a></li>
+                <li class="nav-item"><a class="nav-link" href="/shelter/logout">Вийти</a></li>
             </ul>
         </div>
     </div>
@@ -51,7 +51,7 @@
             </script>
         </div>
         <div class="collapse mt-4" id="collapsible">
-            <form action="#" th:action="@{/edit}" th:object="${shelter}" method="post" id="edit-form">
+            <form action="#" th:action="@{/shelter/edit}" th:object="${shelter}" method="post" id="edit-form">
                 <div class="row mb-3 w-50" id="cap-area-row" >
                     <div class="col" id="cap-col">
                         <label for="capacity" class="form-label">Максимальна місткість:</label>
@@ -92,8 +92,8 @@
                     <textarea class="form-control" rows="2" id="additional" name="additional"
                               placeholder="Загальний стан, як дібратися, тощо" th:field="*{additional}"></textarea>
                 </div>
-                <input type="hidden" id="lat" name="latitude" th:field="*{latitude}">
-                <input type="hidden" id="lng" name="longitude" th:field="*{longitude}">
+                <input type="hidden" id="lat" name="latitude" th:field="*{coordinates.latitude}">
+                <input type="hidden" id="lng" name="longitude" th:field="*{coordinates.longitude}">
                 <div class="mt-4">
                     <input type="submit" value="Змінити сховище" class="btn btn-dark"/>
                 </div>

@@ -24,12 +24,7 @@ public class ContextConfig {
 
     @PostConstruct
     public void postConstruct() {
-        List<Shelter> shelters = shelterRepository.findAll();
-        for (Shelter shelter : shelters) {
-            shelter.setCounter(0);
-            shelterRepository.save(shelter);
-        }
-
+        shelterRepository.resetCounters();
         counterService.enableCounter();
     }
 

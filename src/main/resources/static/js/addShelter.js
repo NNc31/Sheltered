@@ -30,7 +30,7 @@ function initMap()
     for (var i = 0; i < shelters.length; i++) {
         var shelter = shelters[i];
         new google.maps.Marker({
-            position: {lat: shelter.latitude, lng: shelter.longitude},
+            position: {lat: shelter.coordinates.latitude, lng: shelter.coordinates.longitude},
             map: shelterMap
         });
     }

@@ -1,8 +1,10 @@
 package ua.edu.sumdu.nefodov.sheltered.model;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Embeddable
 public class Coordinates implements Serializable {
 
     private double latitude;

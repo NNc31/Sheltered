@@ -41,7 +41,7 @@ function initMap()
     for (var i = 0; i < shelters.length; i++) {
         var shelter = shelters[i];
         marker = new google.maps.Marker({
-            position: {lat: shelter.latitude, lng: shelter.longitude},
+            position: {lat: shelter.coordinates.latitude, lng: shelter.coordinates.longitude},
             map: shelterMap
         });
         google.maps.event.addListener(marker, 'click', (function(marker) {
@@ -51,7 +51,7 @@ function initMap()
                 document.getElementById("lat").value = lat;
                 document.getElementById("lng").value = lng;
 
-                var selectedShelter = shelters.find(sh => {return sh.latitude === lat && sh.longitude === lng});
+                var selectedShelter = shelters.find(sh => {return sh.coordinates.latitude === lat && sh.coordinates.longitude === lng});
                 document.getElementById("capacity").value = selectedShelter.capacity;
                 document.getElementById("area").value = selectedShelter.area;
                 document.getElementById("additional").value = selectedShelter.additional;
