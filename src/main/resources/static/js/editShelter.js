@@ -1,14 +1,14 @@
 var markers = [];
 
 VirtualSelect.init({
-    ele: '#status-select',
+    ele: '#status',
     search: false,
     placeholder: 'Оберіть статус',
     optionsCount: 4
 });
 
 VirtualSelect.init({
-    ele: '#conditions-select',
+    ele: '#conditions',
     search: false,
     placeholder: 'Оберіть умови',
     optionsCount: 4,
@@ -21,45 +21,45 @@ VirtualSelect.init({
 
 function initMap()
 {
-    var element = document.getElementById('map');
-    var options = {
+    let element = document.getElementById('map');
+    let options = {
         zoom: 12,
         center: {lat: 50.9216, lng: 34.80029} // Sumy lat & lng
     };
 
-    var shelterMap = new google.maps.Map(element, options);
+    let shelterMap = new google.maps.Map(element, options);
 
 
 
-    var marker;
-    var audio = new Audio("/sfx/marker-toggle.wav");
+    let marker;
+    let audio = new Audio("/sfx/marker-toggle.wav");
 
-    var collapsible = new bootstrap.Collapse(document.getElementById("collapsible"), {
+    let collapsible = new bootstrap.Collapse(document.getElementById("collapsible"), {
         toggle: false
     });
 
-    for (var i = 0; i < shelters.length; i++) {
-        var shelter = shelters[i];
+    for (let i = 0; i < shelters.length; i++) {
+        let shelter = shelters[i];
         marker = new google.maps.Marker({
             position: {lat: shelter.coordinates.latitude, lng: shelter.coordinates.longitude},
             map: shelterMap
         });
         google.maps.event.addListener(marker, 'click', (function(marker) {
             return function() {
-                var lat = marker.getPosition().lat();
-                var lng = marker.getPosition().lng();
+                let lat = marker.getPosition().lat();
+                let lng = marker.getPosition().lng();
                 document.getElementById("lat").value = lat;
                 document.getElementById("lng").value = lng;
 
-                var selectedShelter = shelters.find(sh => {return sh.coordinates.latitude === lat && sh.coordinates.longitude === lng});
+                let selectedShelter = shelters.find(sh => {return sh.coordinates.latitude === lat && sh.coordinates.longitude === lng});
                 document.getElementById("capacity").value = selectedShelter.capacity;
                 document.getElementById("area").value = selectedShelter.area;
                 document.getElementById("additional").value = selectedShelter.additional;
 
-                document.querySelector('#status-select').setValue(selectedShelter.status);
-                document.querySelector('#conditions-select').setValue(selectedShelter.conditions);
+                document.querySelector('#status').setValue(selectedShelter.status);
+                document.querySelector('#conditions').setValue(selectedShelter.conditions);
 
-                for (var j = 0; j < markers.length; j++) {
+                for (let j = 0; j < markers.length; j++) {
                     markers[j].setIcon();
                 }
                 marker.setIcon("/img/edit-marker.svg");

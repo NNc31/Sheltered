@@ -10,6 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="/css/virtual-select.min.css">
     <script src="/js/virtual-select.min.js"></script>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="/css/map.css">
     <link rel="stylesheet" href="/css/select-box.css">
 </head>
@@ -51,59 +53,71 @@
             </script>
         </div>
         <div class="collapse mt-4" id="collapsible">
-            <form action="#" th:action="@{/shelter/edit}" th:object="${shelter}" method="post" id="edit-form">
-                <div class="row mb-3 w-50" id="cap-area-row" >
-                    <div class="col" id="cap-col">
+            <form action="#" th:action="@{/shelter/edit}" th:object="${shelter}" method="post" id="form">
+                <div class="row mb-3">
+                    <div class="col-md-2">
                         <label for="capacity" class="form-label">Максимальна місткість:</label>
-                        <input id="capacity" class="form-control w-50" type="number" min="0" name="capacity" th:field="*{capacity}">
+                        <input id="capacity" class="form-control w-75" type="number" min="0" th:field="*{capacity}">
                     </div>
-                    <div class="col" id="area-col">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-4">
                         <label for="area" class="form-label">Площа сховища:</label>
-                        <div class="input-group w-75">
-                            <input id="area" class="form-control" type="number" min="0" step="0.01" name="area" th:field="*{area}">
+                        <div class="input-group w-50">
+                            <input id="area" class="form-control" type="number" min="0" step="0.01" th:field="*{area}">
                             <span class="input-group-text">м. кв.</span>
                         </div>
                     </div>
                 </div>
-                <div class="mb-3 w-25" id="status">
-                    <label for="status-select">Статус:</label>
-                    <select id="status-select" class="select-box"
-                            th:field="*{status}">
-                        <option th:each="stat : ${T(ua.edu.sumdu.nefodov.sheltered.model.ShelterStatus).values()}"
-                                th:value="${stat}"
-                                th:text="${stat.label}"
-                                th:id="${stat}">
-                        </option>
-                    </select>
+                <div class="row mb-3">
+                    <div class="col-md-5">
+                        <label for="status">Статус:</label>
+                        <div>
+                            <select id="status" class="select-box"
+                                    th:field="*{status}">
+                                <option th:each="stat : ${T(ua.edu.sumdu.nefodov.sheltered.model.ShelterStatus).values()}"
+                                        th:value="${stat}"
+                                        th:text="${stat.label}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <label for="conditions">Наявні умови:</label>
+                        <div>
+                            <select id="conditions" class="select-box" multiple
+                                    th:field="*{conditions}">
+                                <option th:each="cond : ${T(ua.edu.sumdu.nefodov.sheltered.model.ShelterConditions).values()}"
+                                        th:value="${cond}"
+                                        th:text="${cond.label}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3 w-25" id="conditions">
-                    <label for="conditions-select">Наявні умови:</label>
-                    <select id="conditions-select" class="select-box" multiple
-                            th:field="*{conditions}">
-                        <option th:each="cond : ${T(ua.edu.sumdu.nefodov.sheltered.model.ShelterConditions).values()}"
-                                th:value="${cond}"
-                                th:text="${cond.label}"
-                                th:id="${cond}">
-                        </option>
-                    </select>
+                <div class="row mb-4">
+                    <div class="col-md-5">
+                        <label for="additional">Додаткова інформація:</label>
+                        <textarea class="form-control" rows="3" id="additional" maxlength="250"
+                                  placeholder="Загальний стан, як дібратися, тощо" th:field="*{additional}"></textarea>
+                    </div>
                 </div>
-                <div class="mb-3 w-50">
-                    <label for="additional">Додаткова інформація:</label>
-                    <textarea class="form-control" rows="2" id="additional" name="additional"
-                              placeholder="Загальний стан, як дібратися, тощо" th:field="*{additional}"></textarea>
+                <div class="row mt-2">
+                    <div class="col">
+                        <input onclick="validateAndSubmitForm()" value="Змінити сховище" class="btn btn-dark"/>
+                    </div>
                 </div>
-                <input type="hidden" id="lat" name="latitude" th:field="*{coordinates.latitude}">
-                <input type="hidden" id="lng" name="longitude" th:field="*{coordinates.longitude}">
-                <div class="mt-4">
-                    <input type="submit" value="Змінити сховище" class="btn btn-dark"/>
-                </div>
+                <input type="hidden" id="lat" th:field="*{coordinates.latitude}">
+                <input type="hidden" id="lng" th:field="*{coordinates.longitude}">
             </form>
         </div>
     </div>
 </div>
 </body>
 </html>
+<script src="/js/editShelter.js"></script>
+<script src="/js/formSubmission.js"></script>
 <script th:inline="javascript">
     var shelters = [[${shelters}]];
+    var statuses = [[${statuses}]];
+    var conditionsValues = [[${conditions}]];
 </script>
-<script src="/js/editShelter.js"></script>

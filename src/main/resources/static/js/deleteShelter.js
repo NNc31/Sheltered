@@ -2,19 +2,19 @@ var markers = [];
 
 function initMap()
 {
-    var element = document.getElementById('map');
-    var options = {
+    let element = document.getElementById('map');
+    let options = {
         zoom: 12,
         center: {lat: 50.9216, lng: 34.80029} // Sumy lat & lng
     };
 
-    var shelterMap = new google.maps.Map(element, options);
+    let shelterMap = new google.maps.Map(element, options);
 
-    var marker;
-    var audio = new Audio("/sfx/marker-toggle.wav");
+    let marker;
+    let audio = new Audio("/sfx/marker-toggle.wav");
 
-    for (var i = 0; i < shelters.length; i++) {
-        var shelter = shelters[i];
+    for (let i = 0; i < shelters.length; i++) {
+        let shelter = shelters[i];
         marker = new google.maps.Marker({
             position: {lat: shelter.coordinates.latitude, lng: shelter.coordinates.longitude},
             map: shelterMap
@@ -25,7 +25,7 @@ function initMap()
                 document.getElementById("lat").value = marker.getPosition().lat();
                 document.getElementById("lng").value = marker.getPosition().lng();
 
-                for (var j = 0; j < markers.length; j++) {
+                for (let j = 0; j < markers.length; j++) {
                     markers[j].setIcon();
                 }
 

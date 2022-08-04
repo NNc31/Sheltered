@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import ua.edu.sumdu.nefodov.sheltered.model.Shelter;
+import ua.edu.sumdu.nefodov.sheltered.model.ShelterConditions;
+import ua.edu.sumdu.nefodov.sheltered.model.ShelterStatus;
 import ua.edu.sumdu.nefodov.sheltered.service.ShelterService;
 
 @Controller
@@ -50,6 +52,8 @@ public class ShelteredController {
     public String addShelter(Model model) {
         model.addAttribute("shelter", new Shelter());
         model.addAttribute("shelters", shelterService.findAll());
+        model.addAttribute("statuses", ShelterStatus.values());
+        model.addAttribute("conditions", ShelterConditions.values());
         return "add";
     }
 
@@ -68,6 +72,8 @@ public class ShelteredController {
     public String editShelter(Model model) {
         model.addAttribute("shelter", new Shelter());
         model.addAttribute("shelters", shelterService.findAll());
+        model.addAttribute("statuses", ShelterStatus.values());
+        model.addAttribute("conditions", ShelterConditions.values());
         return "edit";
     }
 
