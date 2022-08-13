@@ -23,7 +23,7 @@
                 <li class="nav-item"><a class="nav-link" href="/shelter/delete-form">Видалити сховище</a></li>
             </ul>
             <ul class="navbar-nav d-flex" style="padding-right: 60px">
-                <li class="nav-item"><a class="nav-link active" href="/user/registration">Реєстрація</a></li>
+                <li class="nav-item"><a class="nav-link" href="/user/registration">Реєстрація</a></li>
                 <li class="nav-item"><a class="nav-link" href="/user/login">Вхід</a></li>
                 <li class="nav-item"><a class="nav-link" href="/user/logout">Вихід</a></li>
             </ul>
@@ -32,29 +32,43 @@
 </nav>
 <div class="container-md" style="padding-left:60px; padding-right:60px">
     <div class="mb-3 mt-4">
-        <div class="alert alert-danger alert-dismissible fade show" role="alert" th:inline="text" th:if="${error}">
-            [[${error}]]
+        <div class="alert alert-success alert-dismissible fade show" role="alert" th:inline="text" th:if="${success}">
+            [[${success}]]
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-        <h4>Будь ласка, заповніть форму нижче</h4>
+        <h4>Для реєстрації необхідно отримати спеціальний ключ</h4>
+        <h6>Будь ласка, заповніть форму нижче для подачі заявки</h6>
     </div>
-    <form action="#" id="form" th:action="@{/user/registration}" th:object="${request}" method="post" class="bg-light px-5 py-3 mb-3">
+    <form action="#" id="form" th:action="@{/user/receive-key}" th:object="${request}" method="post" class="bg-light px-5 py-3 mb-3">
         <div class="row mb-3">
-            <label for="email" class="form-label">Електронна пошта:</label>
-            <input id="email" class="form-control w-50" type="email" th:field="*{email}">
+            <div class="col-md-6">
+                <label for="firstName" class="form-label">Ім'я</label>
+                <input id="firstName" class="form-control w-50" type="text" th:field="*{firstName}">
+            </div>
+            <div class="col-md-6">
+                <label for="lastName" class="form-label">Прізвище</label>
+                <input id="lastName" class="form-control w-50" type="text" th:field="*{lastName}">
+            </div>
         </div>
         <div class="row mb-3">
-            <label for="password" class="form-label">Пароль:</label>
-            <input id="password" class="form-control w-50" type="password" th:field="*{password}">
+            <div class="col-md-6">
+                <label for="email" class="form-label">Електронна пошта:</label>
+                <input id="email" class="form-control w-75" type="email" th:field="*{email}">
+            </div>
+            <div class="col-md-6">
+                <label for="phone" class="form-label">Телефон:</label>
+                <input id="phone" class="form-control w-50" type="text" th:field="*{phone}">
+            </div>
         </div>
         <div class="row mb-4">
-            <label for="key" class="form-label">Ключ доступу:</label>
-            <input id="key" class="form-control w-50" type="text" th:field="*{accessKey}">
-            <small class="mt-2">Не маєте ключа? Отримайте його <a href="/user/receive-key">тут</a></small>
+            <div class="col-md-6">
+                <label for="organisation" class="form-label">Організація/компанія:</label>
+                <input id="organisation" class="form-control w-75" type="text" th:field="*{organisation}">
+            </div>
         </div>
-        <div class="row mt-2">
+        <div class="row mt-3">
             <div class="col">
-                <input onclick="validateAndSubmitRegistration()" value="Зареєструватись" class="btn btn-dark"/>
+                <input onclick="submitKeyForm()" value="Подати заявку" class="btn btn-dark"/>
             </div>
         </div>
     </form>

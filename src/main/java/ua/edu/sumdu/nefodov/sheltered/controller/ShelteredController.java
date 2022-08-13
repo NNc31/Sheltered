@@ -11,6 +11,8 @@ import ua.edu.sumdu.nefodov.sheltered.model.ShelterConditions;
 import ua.edu.sumdu.nefodov.sheltered.model.ShelterStatus;
 import ua.edu.sumdu.nefodov.sheltered.service.ShelterService;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping("/shelter")
 public class ShelteredController {
@@ -58,13 +60,9 @@ public class ShelteredController {
     }
 
     @PostMapping("/add")
-    public RedirectView addShelterSubmit(@ModelAttribute Shelter shelter, RedirectAttributes redirectAttributes) {
-        if (Shelter.isValidShelter(shelter)) {
-            shelterService.addShelter(shelter);
-            redirectAttributes.addFlashAttribute("success", "Сховище успішно додано");
-        } else {
-            redirectAttributes.addFlashAttribute("error", "Неможливо додати сховище");
-        }
+    public RedirectView addShelterSubmit(@Valid @ModelAttribute Shelter shelter, RedirectAttributes redirectAttributes) {
+        shelterService.addShelter(shelter);
+        redirectAttributes.addFlashAttribute("success", "Сховище успішно додано");
         return new RedirectView("/shelter/add-form", true);
     }
 
@@ -78,13 +76,11 @@ public class ShelteredController {
     }
 
     @PostMapping("/edit")
-    public RedirectView editShelterSubmit(@ModelAttribute Shelter shelter, RedirectAttributes redirectAttributes) {
-        if (Shelter.isValidShelter(shelter)) {
-            shelterService.updateShelter(shelter);
-            redirectAttributes.addFlashAttribute("success", "Сховище успішно змінено");
-        } else {
-            redirectAttributes.addFlashAttribute("error", "Неможливо змінити сховище");
-        }
+    public RedirectView editShelterSubmit(@Valid @ModelAttribute Shelter shelter, RedirectAttributes redirectAttributes) {
+        shelterService.updateShelter(shelter);
+        redirectAttributes.addFlashAttribute("success", "Сховище успішно змінено");
+        //redirectAttributes.addFlashAttribute("error", "Неможливо змінити сховище");
+
         return new RedirectView("/shelter/edit-form", true);
     }
 

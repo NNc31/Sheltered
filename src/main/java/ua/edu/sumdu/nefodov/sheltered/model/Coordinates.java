@@ -1,13 +1,20 @@
 package ua.edu.sumdu.nefodov.sheltered.model;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class Coordinates implements Serializable {
 
+    @Max(value = 90, message = "Широта не може бути більшою за 90")
+    @Min(value = -90, message = "Широта не може бути меншою за -90")
     private double latitude;
+
+    @Max(value = 180, message = "Довгота не може бути більшою за 180")
+    @Min(value = -180, message = "Довгота не може бути меншою за -180")
     private double longitude;
 
     public Coordinates() {

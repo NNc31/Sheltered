@@ -1,3 +1,8 @@
+const alertTitle = "Некоректні дані";
+const alertColor = "#000000";
+const validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const validPhoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+
 function validateAndSubmitForm() {
     let lat = document.getElementById("lat").value;
     let lng = document.getElementById("lng").value;
@@ -6,9 +11,6 @@ function validateAndSubmitForm() {
     let status = document.getElementById("status").value;
     let conditions = document.getElementById("conditions").value;
     let additional = document.getElementById("additional").value;
-
-    const alertTitle = "Некоректні дані";
-    const alertColor = "#000000";
 
     if (lat > 90) {
         Swal.fire({
@@ -62,6 +64,100 @@ function validateAndSubmitForm() {
         Swal.fire({
             title: alertTitle,
             text: "Додаткова інформація має бути не більше 250 символів",
+            confirmButtonColor: alertColor
+        });
+    } else {
+        document.getElementById("form").submit();
+    }
+}
+
+function validateAndSubmitRegistration() {
+    let email = document.getElementById("email").value;
+    let pass = document.getElementById("password").value;
+    let key = document.getElementById("key").value;
+
+    if (!email.match(validEmailRegex)) {
+        Swal.fire({
+            title: alertTitle,
+            text: "Некоректна пошта",
+            confirmButtonColor: alertColor
+        });
+    } else if (pass.length < 8) {
+        Swal.fire({
+            title: alertTitle,
+            text: "Мінімальна довжина паролю 8 символів",
+            confirmButtonColor: alertColor
+        });
+    } else if (pass.length > 16) {
+        Swal.fire({
+            title: alertTitle,
+            text: "Максимальна довжина паролю 16 символів",
+            confirmButtonColor: alertColor
+        });
+    } else if (key.length !== 36) {
+        Swal.fire({
+            title: alertTitle,
+            text: "Некоректний ключ",
+            confirmButtonColor: alertColor
+        });
+    } else {
+        document.getElementById("form").submit();
+    }
+}
+
+function submitKeyForm() {
+    let firstName = document.getElementById("firstName").value;
+    let lastName = document.getElementById("lastName").value;
+    let email = document.getElementById("email").value;
+    let phone = document.getElementById("phone").value;
+    let organisation = document.getElementById("organisation").value;
+
+    if (firstName.length < 1 ) {
+        Swal.fire({
+            title: alertTitle,
+            text: "Довжина імені не може бути меншою за 1",
+            confirmButtonColor: alertColor
+        });
+    } else if (firstName.length > 30) {
+        Swal.fire({
+            title: alertTitle,
+            text: "Довжина імені не може бути більшою за 30",
+            confirmButtonColor: alertColor
+        });
+    } else if (lastName.length < 1) {
+        Swal.fire({
+            title: alertTitle,
+            text: "Довжина прізвища не може бути меншою за 1",
+            confirmButtonColor: alertColor
+        });
+    } else if (lastName.length > 30) {
+        Swal.fire({
+            title: alertTitle,
+            text: "Довжина прізвища не може бути більшою за 30",
+            confirmButtonColor: alertColor
+        });
+    } else if (!email.match(validEmailRegex)) {
+        Swal.fire({
+            title: alertTitle,
+            text: "Некоректна пошта",
+            confirmButtonColor: alertColor
+        });
+    } else if (!phone.match(validPhoneRegex)) {
+        Swal.fire({
+            title: alertTitle,
+            text: "Некоректний номер телефону",
+            confirmButtonColor: alertColor
+        });
+    } else if (organisation < 1) {
+        Swal.fire({
+            title: alertTitle,
+            text: "Назва компанії не може бути меншою за 1",
+            confirmButtonColor: alertColor
+        });
+    } else if (organisation.lengt > 40) {
+        Swal.fire({
+            title: alertTitle,
+            text: "Назва компанії не може бути більшою за 40",
             confirmButtonColor: alertColor
         });
     } else {

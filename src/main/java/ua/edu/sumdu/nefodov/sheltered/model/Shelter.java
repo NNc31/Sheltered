@@ -1,6 +1,10 @@
 package ua.edu.sumdu.nefodov.sheltered.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -11,26 +15,28 @@ public class Shelter {
     private Coordinates coordinates;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Статус не може бути пустим")
     private ShelterStatus status;
 
     @ElementCollection(targetClass = ShelterConditions.class)
     @JoinTable(name = "conditions")
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Умови не можуть бути пустими")
     private List<ShelterConditions> conditions;
 
     private int counter;
+
+    @Min(value = 1, message = "Місткість не може бути меншою за 1")
     private int capacity;
+
+    @DecimalMin(value = "0.01", message = "Площа не може бути меншою за 1")
     private double area;
+
+    @Size(max = 250, message = "Додаткова інформація має бути не більше 250 символів")
     private String additional;
 
     public Shelter() {
         counter = 0;
-    }
-
-    public static boolean isValidShelter(Shelter shelter) {
-        return shelter.getArea() > 0 && shelter.getCapacity() > 0 && shelter.getStatus() != null
-                && shelter.getCoordinates().getLatitude() >= -90 && shelter.getCoordinates().getLatitude() <= 90
-                && shelter.getCoordinates().getLongitude() >= -180 && shelter.getCoordinates().getLongitude() <= 180;
     }
 
     public Coordinates getCoordinates() {
