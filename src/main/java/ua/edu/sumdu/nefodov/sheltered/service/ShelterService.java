@@ -50,18 +50,6 @@ public class ShelterService {
         shelterRepo.deleteById(coords);
     }
 
-    public void updateCounter(double lat, double lng, int cnt) {
-        shelterRepo.refreshCount(lat, lng, cnt);
-    }
-
-    public void incrementCounter(double lat, double lng) {
-        shelterRepo.refreshCount(lat, lng, 1);
-    }
-
-    public void decrementCounter(double lat, double lng) {
-        shelterRepo.refreshCount(lat, lng, -1);
-    }
-
     public List<Coordinates> getAllCoords() {
         return shelterRepo.findAllCoordinates();
     }

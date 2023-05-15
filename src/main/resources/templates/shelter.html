@@ -47,10 +47,6 @@
                     </div>
                 </div>
             </div>
-            <div class="mb-3 w-25" id="counter">
-                <label for="counter-field">Поточна кількість людей:</label>
-                <input id="counter-field" style="font-weight: bold;" class="form-control w-25" readonly th:value="${shelter.counter}">
-            </div>
             <div class="mb-3 w-25" id="status">
                 <label for="status-select">Статус:</label>
                 <select id="status-select" class="form-select" disabled>
@@ -79,5 +75,4 @@
 </html>
 <script th:inline="javascript">
     var shelter = [[${shelter}]];
-</script>
-<script src="/js/shelter.js"></script>
+</script>А

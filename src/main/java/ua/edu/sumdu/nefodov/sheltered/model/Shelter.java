@@ -24,8 +24,6 @@ public class Shelter {
     @NotNull(message = "Умови не можуть бути пустими")
     private List<ShelterConditions> conditions;
 
-    private int counter;
-
     @Min(value = 1, message = "Місткість не може бути меншою за 1")
     private int capacity;
 
@@ -36,7 +34,6 @@ public class Shelter {
     private String additional;
 
     public Shelter() {
-        counter = 0;
     }
 
     public Coordinates getCoordinates() {
@@ -45,14 +42,6 @@ public class Shelter {
 
     public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
-    }
-
-    public int getCounter() {
-        return counter;
-    }
-
-    public void setCounter(int counter) {
-        this.counter = counter;
     }
 
     public int getCapacity() {
@@ -100,7 +89,6 @@ public class Shelter {
         return "Shelter{" +
                 "latitude=" + coordinates.getLatitude() +
                 ", longitude=" + coordinates.getLongitude() +
-                ", counter=" + counter +
                 ", status=" + status +
                 ", conditions=" + conditions +
                 ", capacity=" + capacity +
