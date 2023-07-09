@@ -12,6 +12,7 @@ import ua.edu.sumdu.nefodov.sheltered.model.ShelterStatus;
 import ua.edu.sumdu.nefodov.sheltered.service.ShelterService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/shelter")
@@ -29,8 +30,9 @@ public class ShelteredController {
         Double lat = null, lng = null;
         model.addAttribute("lat", lat);
         model.addAttribute("lng", lng);
-
         model.addAttribute("shelters", shelterService.findAll());
+        model.addAttribute("statuses", ShelterStatus.values());
+        model.addAttribute("conditions", ShelterConditions.values());
         return "index";
     }
 
