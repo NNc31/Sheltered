@@ -57,7 +57,7 @@
                 <label for="conditions">Наявні умови:</label>
                 <div class="row mx-3 my-1" id="conditions">
                     <table>
-                        <tr th:each="cond : ${T(ua.edu.sumdu.nefodov.sheltered.model.ShelterConditions).values()}">
+                        <tr th:each="cond : ${T(ua.edu.sumdu.nefodov.sheltered.application.model.ShelterConditions).values()}">
                             <td><i class="fa fa-check" aria-hidden="true" th:if="${#arrays.contains(shelter.conditions, cond)}"></i></td>
                             <td th:utext="${cond.label}"></td>
                         </tr>

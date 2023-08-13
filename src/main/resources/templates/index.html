@@ -34,7 +34,7 @@
         </div>
     </div>
 </nav>
-<div class="container-fluid" style="padding-left:60px; padding-right:60px">
+<div class="container-fluid" style="padding-left:30px; padding-right:60px">
     <div class="mb-3 mt-4">
         <div class="alert alert-danger alert-dismissible fade show" role="alert" th:inline="text" th:if="${error}">
             [[${error}]]
@@ -53,26 +53,26 @@
                             <label for="status">Статус:</label>
                             <div>
                                 <select id="status" class="select-box" multiple>
-                                    <option th:each="stat : ${T(ua.edu.sumdu.nefodov.sheltered.model.ShelterStatus).values()}"
+                                    <option th:each="stat : ${T(ua.edu.sumdu.nefodov.sheltered.application.model.ShelterStatus).values()}"
                                             th:value="${stat}"
                                             th:text="${stat.label}">
                                     </option>
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="central-block">
                                 <label for="conditions">Наявні умови:</label>
                                 <div>
                                     <select id="conditions" class="select-box" multiple>
-                                        <option th:each="cond : ${T(ua.edu.sumdu.nefodov.sheltered.model.ShelterConditions).values()}"
+                                        <option th:each="cond : ${T(ua.edu.sumdu.nefodov.sheltered.application.model.ShelterConditions).values()}"
                                                 th:value="${cond}"
                                                 th:text="${cond.label}">
                                         </option>
                                     </select>
                                 </div>
                                 <input class="form-check-input" type="checkbox" value="" id="optionalCondsCheckbox">
-                                <label class="form-check-label" for="optionalCondsCheckbox" data-toggle="tooltip" data-bs-placement="bottom" title="Необхідні усі обрані умови або хоча б одна">
+                                <label class="form-check-label" for="optionalCondsCheckbox" data-toggle="tooltip" data-bs-placement="bottom" title="Буде достатньо однієї умови для співпадіння">
                                     Опціональні умови
                                 </label>
                                 <script>
@@ -86,13 +86,34 @@
                 </div>
             </div>
             <div class="col-9">
-                <div class="row">
-                    <h4>Огляд сховищ</h4>
-                    <small class="text-muted">Клікніть на необхідний маркер</small>
-                    <form action="#" th:action="@{/shelter}" method="get" id="form">
-                        <input type="hidden" id="lat" name="latitude" th:name="lat">
-                        <input type="hidden" id="lng" name="longitude" th:name="lng">
-                    </form>
+                <div class="row justify-content-between">
+                    <div class="col-4">
+                        <div class="row">
+                            <h4>Огляд сховищ</h4>
+                            <form action="#" th:action="@{/shelter}" method="get" id="form">
+                                <input type="hidden" id="lat" name="latitude" th:name="lat">
+                                <input type="hidden" id="lng" name="longitude" th:name="lng">
+                            </form>
+                        </div>
+                        <div class="row">
+                            <small class="text-muted">Клікніть на необхідний маркер</small>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="row">
+                            <small class="text-muted">Оберіть свій транспорт</small>
+                        </div>
+                        <div class="row">
+                            <select class="form-select" id="route-type-select">
+                                <option selected value="WALKING">Пішки</option>
+                                <option value="DRIVING">Автомобілем</option>
+                                <option value="BICYCLING">Велосипедом</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <input onclick="getLocation()" value="Знайти найближче" class="btn btn-dark"/>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="container-fluid mt-3 mb-5" id="map">

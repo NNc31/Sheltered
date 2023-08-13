@@ -1,8 +1,12 @@
+let markers;
+let shelterMap;
+let directionsRenderer = null;
+
 VirtualSelect.init({
     ele: '#status',
     search: false,
     placeholder: 'Оберіть умови',
-    optionsCount: 4,
+    optionsCount: 10,
     selectAllText: 'Обрати все',
     allOptionsSelectedText: 'Всі',
     optionsSelectedText: 'умов обрано',
@@ -14,7 +18,7 @@ VirtualSelect.init({
     ele: '#conditions',
     search: false,
     placeholder: 'Оберіть умови',
-    optionsCount: 4,
+    optionsCount: 10,
     selectAllText: 'Обрати все',
     allOptionsSelectedText: 'Всі',
     optionsSelectedText: 'умов обрано',
@@ -43,16 +47,14 @@ optCondsChbx.addEventListener('change', function() {
 
 function initMap()
 {
+    markers = [];
     let element = document.getElementById('map');
     let options = {
         zoom: 12,
         center: {lat: 50.9216, lng: 34.80029} // Sumy lat & lng
     };
 
-    let shelterMap = new google.maps.Map(element, options);
-
-    let marker;
-
+    shelterMap = new google.maps.Map(element, options);
     let filterStatus = document.getElementById('status').value;
     let filterCondition = document.getElementById('conditions').value;
 
@@ -63,12 +65,14 @@ function initMap()
             filterStatus.length !== 0 && filterCondition.length === 0 && checkStatusFilter(shelter, filterStatus) ||
             filterStatus.length === 0 && filterCondition.length !== 0 && checkConditionFilter(shelter, filterCondition) ||
             checkStatusFilter(shelter, filterStatus) && checkConditionFilter(shelter, filterCondition)) {
-            addMarker(shelter);
+            addMarker(shelter, shelterMap);
         }
     }
 
-function addMarker(shelter) {
-    marker = new google.maps.Marker({
+}
+
+function addMarker(shelter, shelterMap) {
+    let marker = new google.maps.Marker({
         position: {lat: shelter.coordinates.latitude, lng: shelter.coordinates.longitude},
         map: shelterMap
     });
@@ -80,6 +84,7 @@ function addMarker(shelter) {
             document.getElementById("form").submit();
         };
     })(marker));
+    markers.push(marker);
 }
 
 function checkStatusFilter(shelter, filterStatuses) {
@@ -94,4 +99,84 @@ function checkConditionFilter(shelter, filterConds) {
     }
 }
 
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(getClosestShelter);
+    } else {
+        fireAlert("Неможлива операція", "Геолокація не підтримується цим браузером");
+    }
+}
+
+function getClosestShelter(position) {
+    let coords = [];
+    for (let i = 0; i < shelters.length; i++) {
+        coords[i] = [];
+        coords[i][0] = shelters[i].coordinates.latitude;
+        coords[i][1] = shelters[i].coordinates.longitude;
+    }
+
+    let posLat = position.coords.latitude;
+    let posLng = position.coords.longitude;
+    let minLat = null;
+    let minLng = null;
+    let minDistance = null;
+    if (shelters.length > 0) {
+        for (let i = 0; i < coords.length; i++) {
+            let x = coords[i][0] - posLat;
+            let y = coords[i][1] - posLng;
+            let distance = Math.sqrt(x * x + y * y);
+
+            if (minDistance === null || distance < minDistance) {
+                minDistance = distance;
+                minLat = coords[i][0];
+                minLng = coords[i][1];
+            }
+        }
+        drawShelterRoute({lat: posLat, lng: posLng}, {lat: minLat, lng: minLng});
+    } else {
+        fireAlert("Неможлива операція", "Сховища відсутні")
+    }
+}
+
+function drawShelterRoute(posA, posB) {
+    if (directionsRenderer !== null) {
+        directionsRenderer.setMap(null)
+    }
+
+    let marker = new google.maps.Marker({
+        position: {lat: posA.lat, lng: posA.lng},
+        map: shelterMap
+    });
+    marker.setIcon("/img/person-marker.svg");
+
+    let directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({
+        map: shelterMap,
+        suppressMarkers: true
+    });
+
+    let routeTypeValue = document.getElementById('route-type-select').value;
+
+    let directionRequest = {
+        origin: posA,
+        destination: posB,
+        travelMode: routeTypeValue
+    }
+
+    directionsService.route(directionRequest, function (response, status) {
+        if (status === 'OK') {
+            directionsRenderer.setDirections(response);
+        } else {
+            fireAlert("Неможлива операція", "Не вдається визначити маршрут")
+        }
+        console.log(response);
+    });
+}
+
+function fireAlert(alertTitle, alertText) {
+    Swal.fire({
+        title: alertTitle,
+        text: alertText,
+        confirmButtonColor: "#000000"
+    });
 }

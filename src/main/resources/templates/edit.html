@@ -78,7 +78,7 @@
                         <div>
                             <select id="status" class="select-box"
                                     th:field="*{status}">
-                                <option th:each="stat : ${T(ua.edu.sumdu.nefodov.sheltered.model.ShelterStatus).values()}"
+                                <option th:each="stat : ${T(ua.edu.sumdu.nefodov.sheltered.application.model.ShelterStatus).values()}"
                                         th:value="${stat}"
                                         th:text="${stat.label}">
                                 </option>
@@ -90,7 +90,7 @@
                         <div>
                             <select id="conditions" class="select-box" multiple
                                     th:field="*{conditions}">
-                                <option th:each="cond : ${T(ua.edu.sumdu.nefodov.sheltered.model.ShelterConditions).values()}"
+                                <option th:each="cond : ${T(ua.edu.sumdu.nefodov.sheltered.application.model.ShelterConditions).values()}"
                                         th:value="${cond}"
                                         th:text="${cond.label}">
                                 </option>
