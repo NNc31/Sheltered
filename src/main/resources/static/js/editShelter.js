@@ -1,5 +1,8 @@
 var markers = [];
 
+const countryLat = 48.383022;
+const countryLng = 31.1828699;
+
 VirtualSelect.init({
     ele: '#status',
     search: false,
@@ -23,8 +26,8 @@ function initMap()
 {
     let element = document.getElementById('map');
     let options = {
-        zoom: 12,
-        center: {lat: 50.9216, lng: 34.80029} // Sumy lat & lng
+        zoom: 6,
+        center: {lat: countryLat, lng: countryLng}
     };
 
     let shelterMap = new google.maps.Map(element, options);

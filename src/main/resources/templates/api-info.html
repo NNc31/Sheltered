@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ua">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Sheltered!</title>
     <meta charset="UTF-8">
@@ -25,41 +25,18 @@
                     </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="/project-info">Про проєкт</a></li>
-                <li class="nav-item"><a class="nav-link" href="/api-info">Про API</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/api-info">Про API</a></li>
             </ul>
             <ul class="navbar-nav d-flex" style="padding-right: 60px">
                 <li class="nav-item"><a class="nav-link" href="/user/registration">Реєстрація</a></li>
-                <li class="nav-item"><a class="nav-link active" href="/user/login">Вхід</a></li>
+                <li class="nav-item"><a class="nav-link" href="/user/login">Вхід</a></li>
                 <li class="nav-item"><a class="nav-link" href="/user/logout">Вихід</a></li>
             </ul>
         </div>
     </div>
 </nav>
-<div class="container-md" style="padding-left:60px; padding-right:60px">
-    <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show w-50 mt-4">Некоректні дані
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    <div th:if="${param.logout}" class="alert alert-success alert-dismissible fade show w-50 mt-4">Вихід із акаунту завершено
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    <div class="mb-3 mt-4">
-        <h4>Будь ласка, заповніть форму нижче</h4>
-    </div>
-    <form id="form" th:action="@{/user/perform-login}" method="post" class="bg-light px-5 py-3 mb-3">
-        <div class="row mb-3">
-            <label for="username" class="form-label">Електронна пошта:</label>
-            <input id="username" name="username" class="form-control w-50" type="text" required>
-        </div>
-        <div class="row mb-4">
-            <label for="password" class="form-label">Пароль:</label>
-            <input id="password" name="password" class="form-control w-50" type="password" required>
-        </div>
-        <div class="row mt-3">
-            <div class="col">
-                <button type="submit" class="btn btn-dark">Увійти</button>
-            </div>
-        </div>
-    </form>
+<div class="container-fluid" style="padding-left:30px; padding-right:60px">
+
 </div>
 </body>
 </html>
