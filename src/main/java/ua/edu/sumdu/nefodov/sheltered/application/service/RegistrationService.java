@@ -1,6 +1,7 @@
 package ua.edu.sumdu.nefodov.sheltered.application.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.edu.sumdu.nefodov.sheltered.application.model.*;
@@ -21,7 +22,8 @@ public class RegistrationService {
 
     private  final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private final String KEY_REQUEST_MAIL_TO = "nefyodov.nazar@ukr.net";
+
+    private final String KEY_REQUEST_MAIL_TO;
     private final String KEY_REQUEST_MAIL_SUBJECT = "[Sheltered] Нова заявка на ключ від ";
     private final UserRole DEFAULT_ROLE = UserRole.ROLE_USER;
 
@@ -29,11 +31,13 @@ public class RegistrationService {
     public RegistrationService(UserRepository userRepository,
                                AccessKeyRepository accessKeyRepository,
                                EmailSenderService emailSender,
-                               BCryptPasswordEncoder bCryptPasswordEncoder) {
+                               BCryptPasswordEncoder bCryptPasswordEncoder,
+                               @Value("${administrator.mail}") String keyRequestMailTo) {
         this.userRepository = userRepository;
         this.accessKeyRepository = accessKeyRepository;
         this.emailSender = emailSender;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        KEY_REQUEST_MAIL_TO = keyRequestMailTo;
     }
 
     public void sendAccessKeyRequest(AccessKeyRequest request) {
