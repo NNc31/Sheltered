@@ -23,15 +23,22 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="/shelter/home">Головна</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Сховища</a>
+                    <a class="nav-link dropdown-toggle active" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Сховища</a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                         <li><a class="dropdown-item" href="/shelter/add-form">Додати сховище</a></li>
-                        <li><a class="dropdown-item active" href="/shelter/edit-form">Змінити сховище</a></li>
+                        <li><a class="dropdown-item" href="/shelter/edit-form">Змінити сховище</a></li>
                         <li><a class="dropdown-item" href="/shelter/delete-form">Видалити сховище</a></li>
                     </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="/project-info">Про проєкт</a></li>
                 <li class="nav-item"><a class="nav-link" href="/api-info">Про API</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="volunteerNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Волонтерство</a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                        <li><a class="dropdown-item" href="/volunteering/requests">Переглянути заявки</a></li>
+                        <li><a class="dropdown-item" href="/volunteering/add-request">Створити заявку</a></li>
+                    </ul>
+                </li>
             </ul>
             <ul class="navbar-nav d-flex" style="padding-right: 60px">
                 <li class="nav-item"><a class="nav-link" href="/user/registration">Реєстрація</a></li>

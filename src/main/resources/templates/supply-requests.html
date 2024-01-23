@@ -21,7 +21,7 @@
         <a class="navbar-brand mx-5" href="/shelter/home"><h3>Sheltered!</h3></a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link active" href="/shelter/home">Головна</a></li>
+                <li class="nav-item"><a class="nav-link" href="/shelter/home">Головна</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Сховища</a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
@@ -33,7 +33,7 @@
                 <li class="nav-item"><a class="nav-link" href="/project-info">Про проєкт</a></li>
                 <li class="nav-item"><a class="nav-link" href="/api-info">Про API</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="volunteerNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Волонтерство</a>
+                    <a class="nav-link dropdown-toggle active" id="volunteerNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Волонтерство</a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                         <li><a class="dropdown-item" href="/volunteering/requests">Переглянути заявки</a></li>
                         <li><a class="dropdown-item" href="/volunteering/add-request">Створити заявку</a></li>
@@ -54,8 +54,10 @@
             [[${error}]]
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-
-
+        <div class="alert alert-success alert-dismissible fade show" role="alert" th:inline="text" th:if="${success}">
+            [[${success}]]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
         <div class="row">
             <div class="col-3">
                 <div class="container-md">
@@ -132,9 +134,7 @@
                 <div class="row">
                     <div class="container-fluid mt-3 mb-5" id="map">
                         <script th:inline="javascript">
-                            var shelters = [[${shelters}]];
-                            var statuses = [[${statuses}]];
-                            var conditionsValues = [[${conditions}]];
+                            let supplyRequests = [[${supplyRequests}]]
                         </script>
                         <script src="/js/index.js"></script>
                         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNygk1I_A0o5KiaTXySMczo0evoDak2ug&callback=initMap"
