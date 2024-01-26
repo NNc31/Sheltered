@@ -14,10 +14,10 @@ public class SupplyRequest {
     @NotNull(message = "Заявка повинна мати назву")
     private String name;
 
-    @NotNull(message = "Заявка повинна мати детальний опис")
+    @NotNull(message = "Заявка повинна мати опис")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "shelter_latitude", referencedColumnName = "latitude"),
             @JoinColumn(name = "shelter_longitude", referencedColumnName = "longitude")

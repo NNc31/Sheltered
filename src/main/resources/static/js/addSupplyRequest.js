@@ -2,6 +2,8 @@ let markers = [];
 
 const countryLat = 48.383022;
 const countryLng = 31.1828699;
+const alertTitle = "Некоректні дані";
+const alertColor = "#000000";
 
 VirtualSelect.init({
     ele: '#status',
@@ -30,6 +32,10 @@ function initMap()
         center: {lat: countryLat, lng: countryLng}
     };
 
+    //set impossible lat and lng to make user select the shelter
+    document.getElementById("lat").value = -181;
+    document.getElementById("lng").value = -181;
+
     let shelterMap = new google.maps.Map(element, options);
     let marker;
     let audio = new Audio("/sfx/marker-toggle.wav");
@@ -47,8 +53,6 @@ function initMap()
                 document.getElementById("lat").value = lat;
                 document.getElementById("lng").value = lng;
 
-                let selectedShelter = shelters.find(sh => {return sh.coordinates.latitude === lat && sh.coordinates.longitude === lng});
-
                 for (let j = 0; j < markers.length; j++) {
                     markers[j].setIcon();
                 }
@@ -65,7 +69,6 @@ function validateAndSubmitForm() {
     let lng = document.getElementById("lng").value;
     let name = document.getElementById("name").value;
     let description = document.getElementById("description").value;
-
     if (lat > 90) {
         Swal.fire({
             title: alertTitle,
@@ -90,7 +93,7 @@ function validateAndSubmitForm() {
             text: "Довгота не може бути меншою -180°",
             confirmButtonColor: alertColor
         });
-    } else if (name.length < 0) {
+    } else if (name === null || name.length < 1) {
         Swal.fire({
             title: alertTitle,
             text: "Заявка повинна мати назву",
@@ -102,7 +105,7 @@ function validateAndSubmitForm() {
             text: "Заявка має задовгу назву",
             confirmButtonColor: alertColor
         });
-    } else if (description.length < 0) {
+    } else if (description === null || description.length <= 1) {
         Swal.fire({
             title: alertTitle,
             text: "Заявка повинна мати опис",

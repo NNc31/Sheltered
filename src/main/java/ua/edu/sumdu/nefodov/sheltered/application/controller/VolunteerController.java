@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
+import ua.edu.sumdu.nefodov.sheltered.application.model.Coordinates;
+import ua.edu.sumdu.nefodov.sheltered.application.model.Shelter;
 import ua.edu.sumdu.nefodov.sheltered.application.model.SupplyRequest;
 import ua.edu.sumdu.nefodov.sheltered.application.service.ShelterService;
 import ua.edu.sumdu.nefodov.sheltered.application.service.SupplyRequestService;
@@ -43,6 +45,9 @@ public class VolunteerController {
 
     @PostMapping("/add-request")
     public RedirectView addSupplyRequest(@Valid @ModelAttribute SupplyRequest supplyRequest, RedirectAttributes redirectAttributes) {
+        Coordinates coords = supplyRequest.getShelter().getCoordinates();
+        Shelter selectedShelter = shelterService.findByCoords(coords.getLatitude(), coords.getLongitude());
+        supplyRequest.setShelter(selectedShelter);
         srService.addSupplyRequest(supplyRequest);
         redirectAttributes.addFlashAttribute("success", "Заявку успішно додано");
         return new RedirectView("/volunteering/requests", true);
