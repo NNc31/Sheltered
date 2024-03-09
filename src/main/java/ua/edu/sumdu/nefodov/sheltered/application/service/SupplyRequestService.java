@@ -5,12 +5,13 @@ import org.springframework.stereotype.Service;
 import ua.edu.sumdu.nefodov.sheltered.application.model.SupplyRequest;
 import ua.edu.sumdu.nefodov.sheltered.application.repository.SupplyRequestRepository;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class SupplyRequestService {
 
-    private SupplyRequestRepository srRepo;
+    private final SupplyRequestRepository srRepo;
 
     @Autowired
     public SupplyRequestService(SupplyRequestRepository srRepo) {
@@ -26,6 +27,7 @@ public class SupplyRequestService {
     }
 
     public void addSupplyRequest(SupplyRequest supplyRequest) {
+        supplyRequest.setSubmitDate(new Date());
         srRepo.save(supplyRequest);
     }
 }

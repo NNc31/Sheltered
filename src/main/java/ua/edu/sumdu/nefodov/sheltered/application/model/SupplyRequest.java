@@ -1,7 +1,10 @@
 package ua.edu.sumdu.nefodov.sheltered.application.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity
 @Table(name = "supply_requests")
@@ -23,6 +26,10 @@ public class SupplyRequest {
             @JoinColumn(name = "shelter_longitude", referencedColumnName = "longitude")
     })
     private Shelter shelter;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date submitDate;
 
     public long getId() {
         return id;
@@ -54,5 +61,13 @@ public class SupplyRequest {
 
     public void setShelter(Shelter shelter) {
         this.shelter = shelter;
+    }
+
+    public Date getSubmitDate() {
+        return submitDate;
+    }
+
+    public void setSubmitDate(Date submitDate) {
+        this.submitDate = submitDate;
     }
 }

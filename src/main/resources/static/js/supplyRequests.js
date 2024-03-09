@@ -5,6 +5,7 @@ VirtualSelect.init({
     optionsCount: 1
 });
 
+// no options found
 VirtualSelect.init({
     ele: '#city',
     search: false,
@@ -99,12 +100,12 @@ Promise.all(requests).then(results => {
         console.log(cityRequestPairs);
         let requestsByCities = cityRequestPairs.get(cityElement.value);
 
-
         for (let i = 0; i < requestsByCities.length; i++) {
             let row = tableBody.insertRow(i);
             let index = row.insertCell(0);
             let name = row.insertCell(1);
-            let description = row.insertCell(2);
+            let date = row.insertCell(2);
+            let description = row.insertCell(3);
             row.setAttribute("class", "clickable-row");
             let shelterLink = "http://" + window.location.host + "/shelter?lat=";
             shelterLink = shelterLink + requestsByCities[i].shelter.coordinates.latitude;
@@ -114,6 +115,7 @@ Promise.all(requests).then(results => {
 
             index.innerHTML = (i + 1).toString();
             name.innerHTML = requestsByCities[i].name;
+            date.innerHTML = requestsByCities[i].submitDate;
             description.innerHTML = requestsByCities[i].description;
 
             jQuery(document).ready(function($) {

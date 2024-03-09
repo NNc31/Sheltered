@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .mvcMatchers("/shelter/home").permitAll()
                 .mvcMatchers("/shelter").permitAll()
                 .mvcMatchers("/shelter/**").authenticated()
+                .mvcMatchers("/volunteering/add-request").authenticated()
                 .mvcMatchers("/user/**").permitAll()
                 .mvcMatchers("/api/**").permitAll();
 
