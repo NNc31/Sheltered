@@ -45,8 +45,3 @@ administrator.mail=mail_of_registration_approver
 bot.name=telegram_bot_name
 bot.token=telegram_bot_api_token
 ```
-
-
-### Executing program
-
-* Run application on Local Machine with main class ua.edu.sumdu.nefodov.sheltered.ShelteredApplication or prepare a package and launch created JAR

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ua">
+<head>
+    <title>Sheltered!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/web-service/img/favicon.ico">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+</head>
+<body style="padding-top:60px">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <div class="container-md">
+        <a class="navbar-brand mx-5" href="/web-service/shelter/home"><h3>Sheltered!</h3></a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="/web-service/shelter/home">Головна</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Сховища</a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                        <li><a class="dropdown-item" href="/web-service/shelter/add-form">Додати сховище</a></li>
+                        <li><a class="dropdown-item" href="/web-service/shelter/edit-form">Змінити сховище</a></li>
+                        <li><a class="dropdown-item" href="/web-service/shelter/delete-form">Видалити сховище</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="/web-service/project-info">Про проєкт</a></li>
+                <li class="nav-item"><a class="nav-link" href="/web-service/api-info">Про API</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="volunteerNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Волонтерство</a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                        <li><a class="dropdown-item" href="/web-service/supply/requests">Переглянути заявки</a></li>
+                        <li><a class="dropdown-item" href="/web-service/supply/add-request">Створити заявку</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="navbar-nav d-flex" style="padding-right: 60px">
+                <li class="nav-item"><a class="nav-link" href="/web-service/user/registration">Реєстрація</a></li>
+                <li class="nav-item"><a class="nav-link" href="/web-service/user/login">Вхід</a></li>
+                <li class="nav-item"><a class="nav-link" href="/web-service/user/logout">Вихід</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-md" style="padding-left:60px; padding-right:60px">
+    <div class="mb-3 mt-4">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" th:inline="text" th:if="${success}">
+            [[${success}]]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <h4>Для реєстрації необхідно отримати спеціальний ключ</h4>
+        <h6>Будь ласка, заповніть форму нижче для подачі заявки</h6>
+    </div>
+    <form action="#" id="form" th:action="@{/web-service/user/receive-key}" th:object="${request}" method="post" class="bg-light px-5 py-3 mb-3">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="firstName" class="form-label">Ім'я</label>
+                <input id="firstName" class="form-control w-50" type="text" th:field="*{firstName}">
+            </div>
+            <div class="col-md-6">
+                <label for="lastName" class="form-label">Прізвище</label>
+                <input id="lastName" class="form-control w-50" type="text" th:field="*{lastName}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="email" class="form-label">Електронна пошта:</label>
+                <input id="email" class="form-control w-75" type="email" th:field="*{email}">
+            </div>
+            <div class="col-md-6">
+                <label for="phone" class="form-label">Телефон:</label>
+                <input id="phone" class="form-control w-50" type="text" th:field="*{phone}">
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="organisation" class="form-label">Організація/компанія:</label>
+                <input id="organisation" class="form-control w-75" type="text" th:field="*{organisation}">
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <input onclick="submitKeyForm()" value="Подати заявку" class="btn btn-dark"/>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+<script src="/web-service/js/formSubmission.js"></script>
+<script th:inline="javascript">
+    var shelters = [[${shelters}]];
+    var statuses = [[${statuses}]];
+    var conditionsValues = [[${conditions}]];
+</script>
