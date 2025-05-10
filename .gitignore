@@ -33,3 +33,9 @@ build/
 .vscode/
 
 application.properties
+/*/mvnw.cmd
+/*/mvnw
+/*/.gitignore
+/*/.gitattributes
+/*/.mvn/wrapper/maven-wrapper.properties
+.env

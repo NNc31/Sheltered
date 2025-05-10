@@ -35,7 +35,7 @@ public class ShelterWebController {
     @GetMapping("/home")
     public String index(Model model) {
         Double lat = null, lng = null;
-        ShelterDTO[] shelters = restTemplate.getForObject("http://localhost:8080/shelter-service", ShelterDTO[].class);
+        ShelterDTO[] shelters = restTemplate.getForObject("http://api-gateway:8080/shelter-service", ShelterDTO[].class);
         model.addAttribute("lat", lat);
         model.addAttribute("lng", lng);
         model.addAttribute("shelters", shelters);
@@ -48,7 +48,7 @@ public class ShelterWebController {
     public String showShelterSubmit(Model model,
                                     @RequestParam(value = "lat", required = false) Double lat,
                                     @RequestParam(value = "lng", required = false) Double lng) {
-        String url = "http://localhost:8080/shelter-service/find?lat={lat}&lng={lng}";
+        String url = "http://api-gateway:8080/shelter-service/find?lat={lat}&lng={lng}";
         Map<String, Object> params = new HashMap<>();
         params.put("lat", lat);
         params.put("lng", lng);
@@ -67,7 +67,7 @@ public class ShelterWebController {
 
     @GetMapping("/add-form")
     public String addShelter(Model model) {
-        ShelterDTO[] shelters = restTemplate.getForObject("http://localhost:8080/shelter-service", ShelterDTO[].class);
+        ShelterDTO[] shelters = restTemplate.getForObject("http://api-gateway:8080/shelter-service", ShelterDTO[].class);
         model.addAttribute("shelter", new ShelterDTO());
         model.addAttribute("shelters", shelters);
         model.addAttribute("statuses", ShelterStatus.values());
@@ -85,7 +85,7 @@ public class ShelterWebController {
         HttpEntity<ShelterDTO> entity = new HttpEntity<>(shelter, headers);
 
         ResponseEntity<ShelterDTO> response = restTemplate.exchange(
-                "http://localhost:8080/shelter-service/add",
+                "http://api-gateway:8080/shelter-service/add",
                 HttpMethod.POST,
                 entity,
                 ShelterDTO.class
@@ -98,7 +98,7 @@ public class ShelterWebController {
     @GetMapping("/edit-form")
     public String editShelter(Model model) {
         model.addAttribute("shelter", new ShelterDTO());
-        ShelterDTO[] shelters = restTemplate.getForObject("http://localhost:8080/shelter-service", ShelterDTO[].class);
+        ShelterDTO[] shelters = restTemplate.getForObject("http://api-gateway:8080/shelter-service", ShelterDTO[].class);
         model.addAttribute("shelters", shelters);
         model.addAttribute("statuses", ShelterStatus.values());
         model.addAttribute("conditions", ShelterCondition.values());
@@ -113,7 +113,7 @@ public class ShelterWebController {
         HttpEntity<ShelterDTO> entity = new HttpEntity<>(shelter, headers);
 
         ResponseEntity<ShelterDTO> response = restTemplate.exchange(
-                "http://localhost:8080/shelter-service/update",
+                "http://api-gateway:8080/shelter-service/update",
                 HttpMethod.PUT,
                 entity,
                 ShelterDTO.class
@@ -130,7 +130,7 @@ public class ShelterWebController {
         Double lat = null, lng = null;
         model.addAttribute("lat", lat);
         model.addAttribute("lng", lng);
-        ShelterDTO[] shelters = restTemplate.getForObject("http://localhost:8080/shelter-service", ShelterDTO[].class);
+        ShelterDTO[] shelters = restTemplate.getForObject("http://api-gateway:8080/shelter-service", ShelterDTO[].class);
         model.addAttribute("shelters", shelters);
         return "delete";
     }
@@ -149,7 +149,7 @@ public class ShelterWebController {
             headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + token);
 
             ResponseEntity<Void> response = restTemplate.exchange(
-                    "http://localhost:8080/shelter-service/delete?lat=" + lat + "&lng=" + lng,
+                    "http://api-gateway:8080/shelter-service/delete?lat=" + lat + "&lng=" + lng,
                     HttpMethod.DELETE,
                     new HttpEntity<>(headers),
                     Void.class

@@ -13,13 +13,13 @@ public class GatewayConfig {
         return builder.routes()
                 .route("web_route",  r -> r
                         .path("/web-service/**")
-                        .uri("http://localhost:8081"))
+                        .uri("http://web-service:8081"))
                 .route("shelter_route", r -> r
                         .path("/shelter-service/**")
-                        .uri("http://localhost:8082"))
+                        .uri("http://shelter-service:8082"))
                 .route("supply_route", r -> r
                         .path("/supply-service/**")
-                        .uri("http://localhost:8083"))
+                        .uri("http://supply-service:8083"))
                 .build();
     }
 }
