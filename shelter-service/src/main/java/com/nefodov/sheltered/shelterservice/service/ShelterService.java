@@ -1,5 +1,6 @@
 package com.nefodov.sheltered.shelterservice.service;
 
+import com.nefodov.sheltered.shelterservice.exception.ShelterNotFoundException;
 import com.nefodov.sheltered.shelterservice.model.Coordinates;
 import com.nefodov.sheltered.shelterservice.model.Shelter;
 import com.nefodov.sheltered.shelterservice.repository.ShelterRepository;
@@ -23,6 +24,10 @@ public class ShelterService {
     }
 
     public Shelter findByCoords(double lat, double lng) {
+        Coordinates coords = new Coordinates(lat, lng);
+        if (!shelterRepo.existsById(coords)) {
+            throw new ShelterNotFoundException(coords);
+        }
         return shelterRepo.findById(new Coordinates(lat, lng)).orElse(null);
     }
 
@@ -31,23 +36,18 @@ public class ShelterService {
     }
 
     public Shelter updateShelter(Shelter updatedShelter) {
-        Coordinates coords = new Coordinates(updatedShelter.getCoordinates().getLatitude(), updatedShelter.getCoordinates().getLongitude());
-        Shelter shelterToUpdate = shelterRepo.findById(coords).orElse(null);
-
-        if (shelterToUpdate != null) {
-            shelterToUpdate.setStatus(updatedShelter.getStatus());
-            shelterToUpdate.setConditions(updatedShelter.getConditions());
-            shelterToUpdate.setCapacity(updatedShelter.getCapacity());
-            shelterToUpdate.setArea(updatedShelter.getArea());
-            shelterToUpdate.setAdditional(updatedShelter.getAdditional());
-
-            return shelterRepo.save(shelterToUpdate);
+        Coordinates coords = updatedShelter.getCoordinates();
+        if (!shelterRepo.existsById(coords)) {
+            throw new ShelterNotFoundException(coords);
         }
-        return null;
+        return shelterRepo.save(updatedShelter);
     }
 
     public void deleteShelter(double lat, double lng) {
         Coordinates coords = new Coordinates(lat, lng);
+        if (!shelterRepo.existsById(coords)) {
+            throw new ShelterNotFoundException(coords);
+        }
         shelterRepo.deleteById(coords);
     }
 

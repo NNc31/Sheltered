@@ -26,6 +26,15 @@ public class Shelter {
     public Shelter() {
     }
 
+    public Shelter(Coordinates coordinates, ShelterStatus status, List<ShelterCondition> conditions, int capacity, double area, String additional) {
+        this.coordinates = coordinates;
+        this.status = status;
+        this.conditions = conditions;
+        this.capacity = capacity;
+        this.area = area;
+        this.additional = additional;
+    }
+
     public Coordinates getCoordinates() {
         return coordinates;
     }

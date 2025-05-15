@@ -45,11 +45,8 @@
 <div class="container-md" style="padding-left:60px; padding-right:60px">
     <div class="mb-3 mt-4">
         <h3>Вибачте, щось пішло не так :(</h3>
-        <div th:if="${errors}">
-            <p>Помилки при перевірці данних:</p>
-            <div th:each="error : ${errors}">
-                <p th:text="${error}"></p>
-            </div>
+        <div th:if="${errorMessage}">
+            <p class="text-danger" th:text="${errorMessage}">Щось пішло не так.</p>
         </div>
         <small th:if="${not #lists.isEmpty(errors)}" class="text-muted">Рекомендуємо надіслати листа із описом проблеми на пошту
             <a href="mailto:nefyodov.nazar@ukr.net">nefyodov.nazar@ukr.net</a></small>
