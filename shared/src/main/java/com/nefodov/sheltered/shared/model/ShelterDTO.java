@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ShelterDTO {
 
@@ -72,5 +73,17 @@ public class ShelterDTO {
 
     public void setAdditional(String additional) {
         this.additional = additional;
+    }
+
+    @Override
+    public String toString() {
+        return "ShelterDTO{" +
+                "coordinates=" + coordinates +
+                ", status=" + status +
+                ", conditions=" + conditions +
+                ", capacity=" + capacity +
+                ", area=" + area +
+                ", additional='" + additional + '\'' +
+                '}';
     }
 }

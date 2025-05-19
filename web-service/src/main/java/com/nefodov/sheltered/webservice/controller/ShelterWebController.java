@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -77,11 +76,11 @@ public class ShelterWebController {
     @PostMapping("/add")
     public String addShelterSubmit(@Valid @ModelAttribute ShelterDTO shelter, Model model) {
         HttpEntity<ShelterDTO> entity = new HttpEntity<>(shelter);
-        ResponseEntity<ShelterDTO> response = restTemplate.exchange(
+        ResponseEntity<Void> response = restTemplate.exchange(
                 "http://api-gateway:8080/shelter-service/add",
                 HttpMethod.POST,
                 entity,
-                ShelterDTO.class
+                Void.class
         );
         return index(model);
     }
@@ -98,14 +97,7 @@ public class ShelterWebController {
 
     @PostMapping("/edit")
     public String editShelterSubmit(@Valid @ModelAttribute ShelterDTO shelter, Model model) {
-        HttpEntity<ShelterDTO> entity = new HttpEntity<>(shelter);
-
-        ResponseEntity<ShelterDTO> response = restTemplate.exchange(
-                "http://api-gateway:8080/shelter-service/update",
-                HttpMethod.PUT,
-                entity,
-                ShelterDTO.class
-        );
+        restTemplate.put("http://api-gateway:8080/shelter-service/update", shelter);
         return index(model);
     }
 
@@ -124,13 +116,7 @@ public class ShelterWebController {
                                             @RequestParam(value = "lng", required = false) Double lng,
                                       Model model) {
         if (lat != null && lng != null) {
-            HttpHeaders headers = new HttpHeaders();
-            ResponseEntity<Void> response = restTemplate.exchange(
-                    "http://api-gateway:8080/shelter-service/delete?lat=" + lat + "&lng=" + lng,
-                    HttpMethod.DELETE,
-                    new HttpEntity<>(headers),
-                    Void.class
-            );
+            restTemplate.delete("http://api-gateway:8080/shelter-service/delete?lat=" + lat + "&lng=" + lng);
         }
         return index(model);
     }

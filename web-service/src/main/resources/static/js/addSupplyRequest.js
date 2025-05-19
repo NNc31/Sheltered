@@ -38,7 +38,7 @@ function initMap()
 
     let shelterMap = new google.maps.Map(element, options);
     let marker;
-    let audio = new Audio("/sfx/marker-toggle.wav");
+    let audio = new Audio("/web-service/sfx/marker-toggle.wav");
 
     for (let i = 0; i < shelters.length; i++) {
         let shelter = shelters[i];

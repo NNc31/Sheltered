@@ -3,7 +3,6 @@ package com.nefodov.sheltered.shelterservice;
 import com.nefodov.sheltered.shelterservice.exception.ShelterNotFoundException;
 import com.nefodov.sheltered.shelterservice.model.Coordinates;
 import com.nefodov.sheltered.shelterservice.model.Shelter;
-import com.nefodov.sheltered.shelterservice.model.ShelterStatus;
 import com.nefodov.sheltered.shelterservice.repository.ShelterRepository;
 import com.nefodov.sheltered.shelterservice.service.ShelterService;
 import org.junit.jupiter.api.Test;
@@ -39,21 +38,19 @@ public class ShelterServiceTest {
     }
 
     @Test
-    void testFindByCoordsFound() {
-        Coordinates coords = new Coordinates(1, 1);
+    void testFindByCoordsSuccess() {
         Shelter shelter = new Shelter();
-        when(shelterRepository.findById(coords)).thenReturn(Optional.of(shelter));
+        when(shelterRepository.existsById(any())).thenReturn(true);
+        when(shelterRepository.findById(new Coordinates(1, 1))).thenReturn(Optional.of(shelter));
 
         Shelter result = shelterService.findByCoords(1, 1);
         assertNotNull(result);
     }
 
     @Test
-    void testFindByCoordsNotFound() {
-        when(shelterRepository.findById(any())).thenReturn(Optional.empty());
-
-        Shelter result = shelterService.findByCoords(1, 1);
-        assertNull(result);
+    void testFindByCoordsFail() {
+        when(shelterRepository.existsById(any())).thenReturn(false);
+        assertThrows(ShelterNotFoundException.class, () -> shelterService.findByCoords(1, 1));
     }
 
     @Test
@@ -90,9 +87,15 @@ public class ShelterServiceTest {
     }
 
     @Test
-    void testDeleteShelter() {
+    void testDeleteShelterSuccess() {
+        when(shelterRepository.existsById(any())).thenReturn(true);
         shelterService.deleteShelter(1, 1);
         verify(shelterRepository).deleteById(new Coordinates(1, 1));
+    }
+
+    @Test void testDeleteShelterThrowsIfNotFound() {
+        when(shelterRepository.existsById(any())).thenReturn(false);
+        assertThrows(ShelterNotFoundException.class, () -> shelterService.deleteShelter(1, 1));
     }
 
     @Test

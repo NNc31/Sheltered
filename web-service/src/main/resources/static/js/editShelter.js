@@ -35,7 +35,7 @@ function initMap()
 
 
     let marker;
-    let audio = new Audio("/sfx/marker-toggle.wav");
+    let audio = new Audio("/web-service/sfx/marker-toggle.wav");
 
     let collapsible = new bootstrap.Collapse(document.getElementById("collapsible"), {
         toggle: false
