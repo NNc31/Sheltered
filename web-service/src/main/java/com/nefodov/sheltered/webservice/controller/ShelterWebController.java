@@ -24,13 +24,13 @@ public class ShelterWebController {
     private final RestTemplate restTemplate;
 
     @Autowired
-    public ShelterWebController(RestTemplateBuilder builder) {
-        this.restTemplate = builder.build();
+    public ShelterWebController(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
     @GetMapping("/home")
     public String index(Model model) {
-        Double lat = null, lng = null;
+        Double lat = 48.383022, lng = 31.1828699;
         ShelterDTO[] shelters = restTemplate.getForObject("http://api-gateway:8080/shelter-service", ShelterDTO[].class);
         model.addAttribute("lat", lat);
         model.addAttribute("lng", lng);
