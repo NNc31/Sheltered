@@ -44,6 +44,21 @@ services:
     networks:
       - sheltered-net
 
+  user-service:
+    image: user-service:latest
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      ADMINISTRATOR_EMAIL: ${ADMINISTRATOR_EMAIL}
+      ADMINISTRATOR_EMAIL_PASSWORD: ${ADMINISTRATOR_EMAIL_PASSWORD}
+    networks:
+      - sheltered-net
+
 volumes:
   pgdata:
 

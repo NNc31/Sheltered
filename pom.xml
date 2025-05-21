@@ -12,6 +12,7 @@
         <module>api-gateway</module>
         <module>web-service</module>
         <module>shelter-service</module>
+        <module>user-service</module>
         <module>supply-service</module>
         <module>shared</module>
     </modules>

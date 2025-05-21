@@ -17,9 +17,9 @@ public class GatewayConfig {
                 .route("shelter_route", r -> r
                         .path("/shelter-service/**")
                         .uri("http://shelter-service:8082"))
-                .route("supply_route", r -> r
-                        .path("/supply-service/**")
-                        .uri("http://supply-service:8083"))
+                .route("user_route", r -> r
+                        .path("/user-service/**")
+                        .uri("http://user-service:8083"))
                 .build();
     }
 }

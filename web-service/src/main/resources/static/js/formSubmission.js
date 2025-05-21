@@ -74,7 +74,6 @@ function validateAndSubmitForm() {
 function validateAndSubmitRegistration() {
     let email = document.getElementById("email").value;
     let pass = document.getElementById("password").value;
-    let key = document.getElementById("key").value;
 
     if (!email.match(validEmailRegex)) {
         Swal.fire({
@@ -94,46 +93,27 @@ function validateAndSubmitRegistration() {
             text: "Максимальна довжина паролю 16 символів",
             confirmButtonColor: alertColor
         });
-    } else if (key.length !== 36) {
-        Swal.fire({
-            title: alertTitle,
-            text: "Некоректний ключ",
-            confirmButtonColor: alertColor
-        });
     } else {
         document.getElementById("form").submit();
     }
 }
 
-function submitKeyForm() {
-    let firstName = document.getElementById("firstName").value;
-    let lastName = document.getElementById("lastName").value;
+function applyRegistrationForm() {
+    let fullName = document.getElementById("fullName").value;
     let email = document.getElementById("email").value;
     let phone = document.getElementById("phone").value;
     let organisation = document.getElementById("organisation").value;
 
-    if (firstName.length < 1 ) {
+    if (fullName.length < 1 ) {
         Swal.fire({
             title: alertTitle,
             text: "Довжина імені не може бути меншою за 1",
             confirmButtonColor: alertColor
         });
-    } else if (firstName.length > 30) {
+    } else if (fullName.length > 50) {
         Swal.fire({
             title: alertTitle,
-            text: "Довжина імені не може бути більшою за 30",
-            confirmButtonColor: alertColor
-        });
-    } else if (lastName.length < 1) {
-        Swal.fire({
-            title: alertTitle,
-            text: "Довжина прізвища не може бути меншою за 1",
-            confirmButtonColor: alertColor
-        });
-    } else if (lastName.length > 30) {
-        Swal.fire({
-            title: alertTitle,
-            text: "Довжина прізвища не може бути більшою за 30",
+            text: "Довжина імені не може бути більшою за 50",
             confirmButtonColor: alertColor
         });
     } else if (!email.match(validEmailRegex)) {
