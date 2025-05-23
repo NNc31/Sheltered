@@ -3,6 +3,7 @@ package com.nefodov.sheltered.webservice.controller;
 import com.nefodov.sheltered.shared.model.LoginRequestDTO;
 import com.nefodov.sheltered.shared.model.RegistrationApplicationDTO;
 import com.nefodov.sheltered.shared.model.RegistrationRequestDTO;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -11,7 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -54,7 +58,7 @@ public class UserWebController {
     }
 
     @PostMapping("/registration")
-    public String registrationSubmit(@Valid @ModelAttribute RegistrationRequestDTO request) {
+    public String registrationSubmit(@Valid @ModelAttribute RegistrationRequestDTO request, Model model) {
         HttpEntity<RegistrationRequestDTO> entity = new HttpEntity<>(request);
         ResponseEntity<Void> response = restTemplate.exchange(
                 "http://api-gateway:8080/user-service/registration",
@@ -64,32 +68,39 @@ public class UserWebController {
         );
 
         if (response.getStatusCode() == HttpStatus.OK) {
-            return login();
+            return login(model);
         } else {
             return "registration";
         }
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("request", new LoginRequestDTO());
         return "login";
     }
 
     @PostMapping("/login")
-    public String loginSubmit(@RequestAttribute String username, String password) {
-        LoginRequestDTO request = new LoginRequestDTO(username, password);
+    public String loginSubmit(@ModelAttribute LoginRequestDTO request, Model model, HttpSession session) {
         HttpEntity<LoginRequestDTO> entity = new HttpEntity<>(request);
-        ResponseEntity<Void> response = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.exchange(
                 "http://api-gateway:8080/user-service/login",
                 HttpMethod.POST,
                 entity,
-                Void.class
+                String.class
         );
 
         if (response.getStatusCode() == HttpStatus.OK) {
-            return "redirect:/web-service/shelter/home";
+            session.setAttribute("JWT_TOKEN", response.getBody());
+            return "redirect:" + API_GATEWAY_BASE_URL + "/web-service/shelter/home";
         } else {
-            return login();
+            return login(model);
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("JWT_TOKEN");
+        return "redirect:" + API_GATEWAY_BASE_URL + "/web-service/shelter/home";
     }
 }

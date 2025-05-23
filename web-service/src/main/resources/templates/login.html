@@ -52,14 +52,14 @@
     <div class="mb-3 mt-4">
         <h4>Будь ласка, заповніть форму нижче</h4>
     </div>
-    <form id="form" th:action="@{/web-service/user/login}" method="post" class="bg-light px-5 py-3 mb-3">
+    <form id="form" action="#" th:action="@{/web-service/user/login}" th:object="${request}" method="post" class="bg-light px-5 py-3 mb-3">
         <div class="row mb-3">
             <label for="username" class="form-label">Електронна пошта:</label>
-            <input id="username" name="username" class="form-control w-50" type="text" required>
+            <input id="username" name="username" class="form-control w-50" type="text" required th:field="*{email}">
         </div>
         <div class="row mb-4">
             <label for="password" class="form-label">Пароль:</label>
-            <input id="password" name="password" class="form-control w-50" type="password" required>
+            <input id="password" name="password" class="form-control w-50" type="password" required th:field="*{password}">
         </div>
         <div class="row mt-3">
             <div class="col">

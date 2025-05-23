@@ -12,6 +12,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,6 +31,15 @@ public class UserService {
         this.userRepository = userRepository;
         this.mailSender = mailSender;
         ADMINISTRATOR_EMAIL = administratorEmail;
+    }
+
+    public User getUserByEmail(String email) {
+        List<User> users = userRepository.findUserByEmail(email);
+        if (!users.isEmpty()) {
+            return users.get(0);
+        } else {
+            return null;
+        }
     }
 
     public boolean saveRegistrationApplication(RegistrationApplication registrationApplication) {

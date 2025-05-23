@@ -3,9 +3,13 @@ package com.nefodov.sheltered.userservice.controller;
 import com.nefodov.sheltered.shared.model.LoginRequestDTO;
 import com.nefodov.sheltered.shared.model.RegistrationApplicationDTO;
 import com.nefodov.sheltered.shared.model.RegistrationRequestDTO;
+import com.nefodov.sheltered.userservice.model.User;
+import com.nefodov.sheltered.userservice.service.JwtService;
 import com.nefodov.sheltered.userservice.service.UserService;
 import com.nefodov.sheltered.userservice.service.mapper.RegistrationApplicationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,11 +22,15 @@ public class UserRestController {
 
     private final UserService userService;
     private final RegistrationApplicationMapper applicationMapper;
+    private final JwtService jwtService;
 
     @Autowired
-    public UserRestController(UserService userService, RegistrationApplicationMapper applicationMapper) {
+    public UserRestController(UserService userService,
+                              @Qualifier("registrationApplicationMapperImpl") RegistrationApplicationMapper applicationMapper,
+                              JwtService jwtService) {
         this.userService = userService;
         this.applicationMapper = applicationMapper;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/registration-application")
@@ -44,7 +52,14 @@ public class UserRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginRequestDTO requestDTO) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> login(@RequestBody LoginRequestDTO request) {
+        User user = userService.getUserByEmail(request.getEmail());
+        if (user != null && user.getPassword().equals(request.getPassword())) {
+            String token = jwtService.generateToken(user);
+            return ResponseEntity.ok(token);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
+
 }

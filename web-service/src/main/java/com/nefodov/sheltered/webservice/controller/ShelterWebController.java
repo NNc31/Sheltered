@@ -3,10 +3,12 @@ package com.nefodov.sheltered.webservice.controller;
 import com.nefodov.sheltered.shared.model.ShelterCondition;
 import com.nefodov.sheltered.shared.model.ShelterDTO;
 import com.nefodov.sheltered.shared.model.ShelterStatus;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -74,12 +76,15 @@ public class ShelterWebController {
 
 
     @PostMapping("/add")
-    public String addShelterSubmit(@Valid @ModelAttribute ShelterDTO shelter, Model model) {
-        HttpEntity<ShelterDTO> entity = new HttpEntity<>(shelter);
+    public String addShelterSubmit(@Valid @ModelAttribute ShelterDTO shelter, Model model, HttpSession session) {
+        String token = (String) session.getAttribute("JWT_TOKEN");
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+
         ResponseEntity<Void> response = restTemplate.exchange(
                 "http://api-gateway:8080/shelter-service/add",
                 HttpMethod.POST,
-                entity,
+                new HttpEntity<>(shelter, headers),
                 Void.class
         );
         return index(model);
@@ -96,8 +101,15 @@ public class ShelterWebController {
     }
 
     @PostMapping("/edit")
-    public String editShelterSubmit(@Valid @ModelAttribute ShelterDTO shelter, Model model) {
-        restTemplate.put("http://api-gateway:8080/shelter-service/update", shelter);
+    public String editShelterSubmit(@Valid @ModelAttribute ShelterDTO shelter, Model model, HttpSession session) {
+        String token = (String) session.getAttribute("JWT_TOKEN");
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+
+        ResponseEntity<Void> response = restTemplate.exchange("http://api-gateway:8080/shelter-service/update",
+                HttpMethod.PUT,
+                new HttpEntity<>(shelter, headers),
+                Void.class);
         return index(model);
     }
 
@@ -114,9 +126,17 @@ public class ShelterWebController {
     @PostMapping("/delete")
     public String deleteShelterSubmit(@RequestParam(value = "lat", required = false) Double lat,
                                             @RequestParam(value = "lng", required = false) Double lng,
-                                      Model model) {
+                                      Model model,
+                                      HttpSession session) {
+        String token = (String) session.getAttribute("JWT_TOKEN");
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+
         if (lat != null && lng != null) {
-            restTemplate.delete("http://api-gateway:8080/shelter-service/delete?lat=" + lat + "&lng=" + lng);
+            ResponseEntity<Void> response = restTemplate.exchange("http://api-gateway:8080/shelter-service/delete?lat=" + lat + "&lng=" + lng,
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(headers),
+                    Void.class);
         }
         return index(model);
     }
