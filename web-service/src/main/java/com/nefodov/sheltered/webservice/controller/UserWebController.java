@@ -70,7 +70,7 @@ public class UserWebController {
         if (response.getStatusCode() == HttpStatus.OK) {
             return login(model);
         } else {
-            return "registration";
+            return registration(model);
         }
     }
 
