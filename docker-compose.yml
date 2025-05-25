@@ -19,6 +19,8 @@ services:
       - "8080:8080"
     depends_on:
       - shelter-service
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
     networks:
       - sheltered-net
 
@@ -56,6 +58,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       ADMINISTRATOR_EMAIL: ${ADMINISTRATOR_EMAIL}
       ADMINISTRATOR_EMAIL_PASSWORD: ${ADMINISTRATOR_EMAIL_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
     networks:
       - sheltered-net
 
