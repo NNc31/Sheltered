@@ -1,47 +1,38 @@
 # Sheltered
-
-## Author
-
-Nefodov Nazar
-@Alphecca31
-
-## Description
-
-Web-application as master system of shelters.
-Possible actions - add, edit, remove, find shelters.
-Additional features - find the closest shelter, filter shelters by conditions or status.
+Spring Boot web application as master system of shelters.
+Interactive map based on Google Maps API for location selection.
+Allows CRUD operations, registration, finding the closest shelter, filtering shelters by conditions or status.
 Functionality for placing a volunteering requests is in development.
 
-## Getting Started
-
-### Dependencies
-
-* Application requires Oracle Database with enabled listener
-
-### Installing
-
-* Download github repository
-* application.properties required in resources folder
-* prepare a build using Maven
-
-Example of the application.properties folder:
+## Installation and Docker deployment
+1. Clone repository `git clone https://github.com/NNc31/Sheltered.git`
+2. Prepare .env file (example in [Configuration](#Configuration))
+3. Build project JARs with `mvn clean package -DskipTests`
+4. Prepare images for all modules
 ```
-spring.application.name=Sheltered
-spring.datasource.driver-class-name=oracle.jdbc.driver.OracleDriver
-spring.datasource.url=jdbc:oracle:thin:@localhost:1521:xe
-spring.datasource.username=your_username
-spring.datasource.password=your_password
-spring.jpa.generate-ddl=true
-
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-spring.mail.username=mail_username@gmail.com
-spring.mail.password=mail_password
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true
-
-administrator.mail=mail_of_registration_approver
-
-bot.name=telegram_bot_name
-bot.token=telegram_bot_api_token
+docker build -t api-gateway:latest api-gateway
+docker build -t web-service:latest web-service
+docker build -t shelter-service:latest shelter-service
+docker build -t user-service:latest user-service
 ```
+5. Run `docker-compose up -d`
+
+## Configuration
+Example of .env file with all necessary variables
+```
+POSTGRES_DB=db_name
+POSTGRES_USER=db_user
+POSTGRES_PASSWORD=db_password
+SPRING_DATASOURCE_URL=db_jdbc_link
+SPRING_DATASOURCE_USERNAME=db_user
+SPRING_DATASOURCE_PASSWORD=db_password
+ADMINISTRATOR_EMAIL=email_for_sending_registration_requests
+ADMINISTRATOR_EMAIL_PASSWORD=password_for_email_api_if_required
+JWT_SECRET=jwt_secret_32+_chars
+```
+
+## Author
+Nefodov Nazar
+
+## License
+The project is distributed under [MIT] license [MIT](LICENSE.md).

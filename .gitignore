@@ -39,3 +39,4 @@ application.properties
 /*/.gitattributes
 /*/.mvn/wrapper/maven-wrapper.properties
 .env
+secret.yaml
