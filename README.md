@@ -10,12 +10,19 @@ Functionality for placing a volunteering requests is in development.
 3. Build project JARs with `mvn clean package -DskipTests`
 4. Prepare images for all modules
 ```
-docker build -t api-gateway:latest api-gateway
-docker build -t web-service:latest web-service
-docker build -t shelter-service:latest shelter-service
-docker build -t user-service:latest user-service
+docker build -t sheltered-api-gateway:latest api-gateway
+docker build -t sheltered-web-service:latest web-service
+docker build -t sheltered-shelter-service:latest shelter-service
+docker build -t sheltered-user-service:latest user-service
 ```
 5. Run `docker-compose up -d`
+
+## Deployment to Kubernetes
+1. Prepare repository, JARs and Docker images as done for [Docker deployment](#installation-and-docker-deployment)
+2. Prepare secret.yaml based on secret-template.yaml
+3. Apply secret configuration `kubectl apply -f secret.yaml`
+4. Apply deployment configuration `kubectl apply -f k8s-deployment.yaml`
+5. Forward port for api gateway `kubectl port-forward service/api-gateway 8080:8080`
 
 ## Configuration
 Example of .env file with all necessary variables
@@ -35,4 +42,4 @@ JWT_SECRET=jwt_secret_32+_chars
 Nefodov Nazar
 
 ## License
-The project is distributed under [MIT] license [MIT](LICENSE.md).
+The project is distributed under [MIT](LICENSE.md) license.

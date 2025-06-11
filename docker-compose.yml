@@ -14,7 +14,7 @@ services:
       - sheltered-net
 
   api-gateway:
-    image: api-gateway:latest
+    image: sheltered-api-gateway:latest
     ports:
       - "8080:8080"
     depends_on:
@@ -25,16 +25,16 @@ services:
       - sheltered-net
 
   web-service:
-    image: web-service:latest
+    image: sheltered-web-service:latest
     ports:
       - "8081:8081"
     depends_on:
-      - api-gateway
+      - sheltered-api-gateway
     networks:
       - sheltered-net
 
   shelter-service:
-    image: shelter-service:latest
+    image: sheltered-shelter-service:latest
     ports:
       - "8082:8082"
     depends_on:
@@ -47,7 +47,7 @@ services:
       - sheltered-net
 
   user-service:
-    image: user-service:latest
+    image: sheltered-user-service:latest
     ports:
       - "8083:8083"
     depends_on:

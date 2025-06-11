@@ -6,10 +6,10 @@ metadata:
   namespace: default
 
 data:
-  POSTGRES_DB: shelteredb
-  POSTGRES_USER: postgres
-  SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shelteredb
-  SPRING_DATASOURCE_USERNAME: postgres
+  POSTGRES_DB: "shelteredb"
+  POSTGRES_USER: "postgres"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/shelteredb"
+  SPRING_DATASOURCE_USERNAME: "postgres"
 ---
 apiVersion: v1
 kind: Service
@@ -74,7 +74,7 @@ metadata:
   namespace: default
 spec:
   selector:
-    app: shelter-service
+    app: sheltered-shelter-service
   ports:
     - port: 8082
       targetPort: 8082
@@ -82,21 +82,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shelter-service
+  name: sheltered-shelter-service
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: shelter-service
+      app: sheltered-shelter-service
   template:
     metadata:
       labels:
-        app: shelter-service
+        app: sheltered-shelter-service
     spec:
       containers:
-        - name: shelter-service
-          image: shelter-service:latest
+        - name: sheltered-shelter-service
+          image: sheltered-shelter-service:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 8082
@@ -125,7 +125,7 @@ metadata:
   namespace: default
 spec:
   selector:
-    app: api-gateway
+    app: sheltered-api-gateway
   ports:
     - port: 8080
       targetPort: 8080
@@ -135,24 +135,30 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-gateway
+  name: sheltered-api-gateway
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-gateway
+      app: sheltered-api-gateway
   template:
     metadata:
       labels:
-        app: api-gateway
+        app: sheltered-api-gateway
     spec:
       containers:
-        - name: api-gateway
-          image: api-gateway:latest
+        - name: sheltered-api-gateway
+          image: sheltered-api-gateway:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sheltered-secret
+                  key: JWT_SECRET
 
 ---
 apiVersion: v1
@@ -162,7 +168,7 @@ metadata:
   namespace: default
 spec:
   selector:
-    app: web-service
+    app: sheltered-web-service
   ports:
     - port: 8081
       targetPort: 8081
@@ -172,21 +178,87 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-service
+  name: sheltered-web-service
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web-service
+      app: sheltered-web-service
   template:
     metadata:
       labels:
-        app: web-service
+        app: sheltered-web-service
     spec:
       containers:
-        - name: web-service
-          image: web-service:latest
+        - name: sheltered-web-service
+          image: sheltered-web-service:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: default
+spec:
+  selector:
+    app: sheltered-user-service
+  ports:
+    - port: 8083
+      targetPort: 8083
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sheltered-user-service
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sheltered-user-service
+  template:
+    metadata:
+      labels:
+        app: sheltered-user-service
+    spec:
+      containers:
+        - name: sheltered-user-service
+          image: sheltered-user-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8083
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sheltered-config
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: sheltered-config
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sheltered-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+            - name: ADMINISTRATOR_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: sheltered-secret
+                  key: ADMINISTRATOR_EMAIL
+            - name: ADMINISTRATOR_EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sheltered-secret
+                  key: ADMINISTRATOR_EMAIL_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sheltered-secret
+                  key: JWT_SECRET
